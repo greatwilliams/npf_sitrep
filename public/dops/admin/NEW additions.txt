@@ -1,0 +1,1 @@
+activate_user field added to user table

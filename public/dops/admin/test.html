@@ -1,0 +1,24 @@
+
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+
+
+<input type="checkbox" name="acceptRules" class="inline checkbox" id="register_priviledge" value="Denied">
+
+<div id="register_priviledge-value"></div>
+
+<script> 
+$('#register_priviledge-value').text($('#register_priviledge').val());
+
+$("#register_priviledge").on('change', function() {
+  if ($(this).is(':checked')) {
+    $(this).attr('value', 'Granted');
+  } else {
+    $(this).attr('value', 'Denied');
+  }
+  
+  $('#register_priviledge-value').text($('#register_priviledge').val());
+});
+</script>
+
