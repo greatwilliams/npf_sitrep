@@ -115,8 +115,7 @@
 
 				
 
-					<!--end row-->
-				<div class="row row-cols-1 row-cols-md-2 row-cols-xl-2">
+				<!-- <div class="row row-cols-1 row-cols-md-2 row-cols-xl-2">
 					<div class="col">
 						<div class="card w-100">
 							<div class="card-body">
@@ -133,7 +132,7 @@
 							</div>
 							</div>
 					   </div>
-					</div>
+					</div> -->
 					
 					<div class="col">
 						<div class="card w-100">
@@ -226,7 +225,7 @@
 					   </div>
 					</div>
 
-                </div>
+                <!-- </div> -->
 				<!--end row-->
 
 

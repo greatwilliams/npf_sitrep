@@ -243,23 +243,46 @@ class SitrepController extends Controller
         return view('sitrep.sitrep.view_100_sitreps', compact('info','sitreps'))->with('error','Sitrep Added Successfully');
     } 
 
-    public function ViewStateSitrep( Request $request) 
+    // public function ViewStateSitrep( Request $request) 
+    // {
+    //     $state_id = Auth::user()->state; 
+    //     $state = State::find($state_id)->name;
+    //     // dd($state);
+
+    //     $sitreps = Sitrep::select(DB::raw(" * "))
+    //     //->whereBetween('incident_date', '')
+    //     ->where('remarks','=',1)
+    //     ->where('state_id',$state)
+    //     ->where('created_at',date('Y-m-d', strtotime('-1 day'))) // less than 24 hours
+    //     ->limit(100)
+    //     ->orderBy('id','DESC')
+    //     ->get(); 
+    //     // dd($sitreps);
+    //     $info = 'Most Recent Sitrep'; 
+    //     return view('sitrep.sitrep.view_state_100_sitreps', compact('info','sitreps'))->with('error','Sitrep Added Successfully');
+    // } 
+
+    public function ViewStateSitrep(Request $request) 
     {
         $state_id = Auth::user()->state; 
         $state = State::find($state_id)->name;
         // dd($state);
 
+        // Get the timestamp for 24 hours ago
+        $twentyFourHoursAgo = Carbon::now()->subHours(24);
+
         $sitreps = Sitrep::select(DB::raw(" * "))
-        //->whereBetween('incident_date', '')
-        ->where('remarks','=',1)
-        ->where('state_id',$state)
-        ->limit(100)
-        ->orderBy('id','DESC')
-        ->get(); 
+            ->where('remarks', '=', 1)
+            ->where('state_id', $state)
+            ->where('created_at', '>=', $twentyFourHoursAgo) // Records created in the last 24 hours
+            ->limit(100)
+            ->orderBy('id', 'DESC')
+            ->get(); 
+        
         // dd($sitreps);
-        $info = 'Most Recent Sitrep'; 
+        $info = 'Most Recent Sitrep (Last 24 Hours)'; 
         return view('sitrep.sitrep.view_state_100_sitreps', compact('info','sitreps'))->with('error','Sitrep Added Successfully');
-    } 
+    }
 
     public function EditSitrep($id) {
         $sitreps = Sitrep::find($id);
@@ -515,10 +538,51 @@ class SitrepController extends Controller
         $incident_date = $date_from;
         $incident_date2 = $date_from;
 
-        // $date_from = $request->date_from;
-        // $date_to = $request->date_to;
-        // $incident_date = $date_from;
-        // $incident_date2 = $date_to;
+        // THIS CALCULATES THE TOTAL OF EACH INCIDENT
+        $sitreps_state_group = Sitrep::select(DB::raw(" state_id,
+            SUM(CASE WHEN crime_type = 1 THEN `number_incident` ELSE 0 END) AS crime1
+            , SUM(CASE WHEN crime_type = 2 THEN `number_incident` ELSE 0 END) AS crime2
+            , SUM(CASE WHEN crime_type = 3 THEN `number_incident` ELSE 0 END) AS crime3
+            , SUM(CASE WHEN crime_type = 4 THEN `number_incident` ELSE 0 END) AS crime4
+            , SUM(CASE WHEN crime_type = 5 THEN `number_incident` ELSE 0 END) AS crime5
+            , SUM(CASE WHEN crime_type = 6 THEN `number_incident` ELSE 0 END) AS crime6
+            , SUM(CASE WHEN crime_type = 7 THEN `number_incident` ELSE 0 END) AS crime7
+            , SUM(CASE WHEN crime_type = 8 THEN `number_incident` ELSE 0 END) AS crime8
+            , SUM(CASE WHEN crime_type = 9 THEN `number_incident` ELSE 0 END) AS crime9
+            , SUM(CASE WHEN crime_type = 10 THEN `number_incident` ELSE 0 END) AS crime10
+            , SUM(CASE WHEN crime_type = 11 THEN `number_incident` ELSE 0 END) AS crime11
+            , SUM(CASE WHEN crime_type = 12 THEN `number_incident` ELSE 0 END) AS crime12
+            , SUM(CASE WHEN crime_type = 13 THEN `number_incident` ELSE 0 END) AS crime13
+            , SUM(CASE WHEN crime_type = 14 THEN `number_incident` ELSE 0 END) AS crime14
+            , SUM(CASE WHEN crime_type = 15 THEN `number_incident` ELSE 0 END) AS crime15
+            , SUM(CASE WHEN crime_type = 16 THEN `number_incident` ELSE 0 END) AS crime16
+            , SUM(CASE WHEN crime_type = 17 THEN `number_incident` ELSE 0 END) AS crime17
+            , SUM(CASE WHEN crime_type = 18 THEN `number_incident` ELSE 0 END) AS crime18
+            , SUM(CASE WHEN crime_type = 19 THEN `number_incident` ELSE 0 END) AS crime19
+            , SUM(CASE WHEN crime_type = 20 THEN `number_incident` ELSE 0 END) AS crime20
+            , SUM(`number_incident`) as total_fireamrs"))
+                ->where(function ($query) {
+                    $query
+                    ->where('crime_type','=',1)
+                    ->orwhere('crime_type','=',2)
+                    ->orwhere('crime_type','=',3)
+                    ->orwhere('crime_type','=',4)
+                    ->orwhere('crime_type','=',5)
+                    ->orwhere('crime_type','=',6)
+                    ->orwhere('crime_type','=',7)
+                    ->orwhere('crime_type','=',8)
+                    ->orwhere('crime_type','=',15)
+                    ->orwhere('crime_type','=',17)
+                    ->orwhere('crime_type','=',21);
+                })
+            ->whereBetween('incident_date', [$date_from, $date_to])
+            ->groupBy('state_id')
+            ->orderBy('state_id')
+            ->get();
+        
+      
+        // dd($sitreps_state_group);
+
                
         // THIS CALCULATES THE TOTAL OF EACH INCIDENT
         $sitreps_total = Sitrep::select(DB::raw(" 
@@ -672,7 +736,7 @@ class SitrepController extends Controller
         
         $info = 'SITREP of '.date_format($incident_date1,"jS F, Y").''; 
         // else{ $info = 'SITREP from '.date_format($incident_date1,"jS F, Y").' to '.date_format($incident_date2,"jS F, Y").'';  }
-        return view('sitrep.sitrep.daily_report', compact('sitreps','sitrep_details','info','sitreps_state_total','sitreps_total','sitreps_crime_type','sitreps_crime_type_state','incident_date','groupby_type','groupby_name'));
+        return view('sitrep.sitrep.daily_report', compact('sitreps_state_group','sitreps','sitrep_details','info','sitreps_state_total','sitreps_total','sitreps_crime_type','sitreps_crime_type_state','incident_date','groupby_type','groupby_name'));
     } // End Mehtod 
 
     public function MonthlyReport(Request $request)
@@ -698,6 +762,51 @@ class SitrepController extends Controller
         $incident_date2 = $date_to;
                  
        // dd($date_to);
+
+       // THIS CALCULATES THE TOTAL OF EACH INCIDENT
+        $sitreps_state_group = Sitrep::select(DB::raw(" state_id,
+            SUM(CASE WHEN crime_type = 1 THEN `number_incident` ELSE 0 END) AS crime1
+            , SUM(CASE WHEN crime_type = 2 THEN `number_incident` ELSE 0 END) AS crime2
+            , SUM(CASE WHEN crime_type = 3 THEN `number_incident` ELSE 0 END) AS crime3
+            , SUM(CASE WHEN crime_type = 4 THEN `number_incident` ELSE 0 END) AS crime4
+            , SUM(CASE WHEN crime_type = 5 THEN `number_incident` ELSE 0 END) AS crime5
+            , SUM(CASE WHEN crime_type = 6 THEN `number_incident` ELSE 0 END) AS crime6
+            , SUM(CASE WHEN crime_type = 7 THEN `number_incident` ELSE 0 END) AS crime7
+            , SUM(CASE WHEN crime_type = 8 THEN `number_incident` ELSE 0 END) AS crime8
+            , SUM(CASE WHEN crime_type = 9 THEN `number_incident` ELSE 0 END) AS crime9
+            , SUM(CASE WHEN crime_type = 10 THEN `number_incident` ELSE 0 END) AS crime10
+            , SUM(CASE WHEN crime_type = 11 THEN `number_incident` ELSE 0 END) AS crime11
+            , SUM(CASE WHEN crime_type = 12 THEN `number_incident` ELSE 0 END) AS crime12
+            , SUM(CASE WHEN crime_type = 13 THEN `number_incident` ELSE 0 END) AS crime13
+            , SUM(CASE WHEN crime_type = 14 THEN `number_incident` ELSE 0 END) AS crime14
+            , SUM(CASE WHEN crime_type = 15 THEN `number_incident` ELSE 0 END) AS crime15
+            , SUM(CASE WHEN crime_type = 16 THEN `number_incident` ELSE 0 END) AS crime16
+            , SUM(CASE WHEN crime_type = 17 THEN `number_incident` ELSE 0 END) AS crime17
+            , SUM(CASE WHEN crime_type = 18 THEN `number_incident` ELSE 0 END) AS crime18
+            , SUM(CASE WHEN crime_type = 19 THEN `number_incident` ELSE 0 END) AS crime19
+            , SUM(CASE WHEN crime_type = 20 THEN `number_incident` ELSE 0 END) AS crime20
+            , SUM(`number_incident`) as total_fireamrs"))
+                ->where(function ($query) {
+                    $query
+                    ->where('crime_type','=',1)
+                    ->orwhere('crime_type','=',2)
+                    ->orwhere('crime_type','=',3)
+                    ->orwhere('crime_type','=',4)
+                    ->orwhere('crime_type','=',5)
+                    ->orwhere('crime_type','=',6)
+                    ->orwhere('crime_type','=',7)
+                    ->orwhere('crime_type','=',8)
+                    ->orwhere('crime_type','=',15)
+                    ->orwhere('crime_type','=',17)
+                    ->orwhere('crime_type','=',21);
+                })
+            ->whereBetween('incident_date', [$date_from, $date_to])
+            ->groupBy('state_id')
+            ->orderBy('state_id')
+        ->get();
+        
+      
+        // dd($sitreps_state_group);
 
       
 
@@ -771,7 +880,7 @@ class SitrepController extends Controller
             ->orderBy('state_id')
             ->get();
 
-         // THIS DISPLAYS THE NUMBER OF INCIDENTS CHARTS BY CRIME TYPE
+        // THIS DISPLAYS THE NUMBER OF INCIDENTS CHARTS BY CRIME TYPE
         $sitreps_crime_type = Sitrep::select(DB::raw(" crime_type,  
                 SUM(number_incident) AS number_incident, 
                 SUM(number_victims) AS number_victims, 
@@ -792,7 +901,9 @@ class SitrepController extends Controller
             // ->where('sitrep_id','=',$sitrep_id)
             ->groupBy('crime_type')
             // ->orderBy('crime_type')
-            ->get();
+        ->get();
+
+
 
             // THIS DISPLAYS THE NUMBER OF INCIDENTS CHARTS BY CRIME TYPE & STATE
         $sitreps_crime_type_state = Sitrep::select(DB::raw(" crime_type, state_id, 
@@ -853,7 +964,7 @@ class SitrepController extends Controller
         $info = 'Date: '.date_format($incident_date1,"F, Y").''; 
 
         // dd($sitreps->all());
-        return view('sitrep.sitrep.daily_report', compact('sitreps','sitrep_details','info','sitreps_state_total','sitreps_total','sitreps_crime_type','sitreps_crime_type_state','incident_date','groupby_type','groupby_name'));
+        return view('sitrep.sitrep.daily_report', compact('sitreps_state_group','sitreps','sitrep_details','info','sitreps_state_total','sitreps_total','sitreps_crime_type','sitreps_crime_type_state','incident_date','groupby_type','groupby_name'));
     } // End Mehtod 
 
    public function CustomReport(Request $request)
@@ -1001,7 +1112,7 @@ class SitrepController extends Controller
             // ->where('sitrep_id','=',$sitrep_id)
             ->groupBy('crime_type')
             // ->orderBy('crime_type')
-            ->get();
+        ->get();
 
             // THIS DISPLAYS THE NUMBER OF INCIDENTS CHARTS BY CRIME TYPE & STATE
         $sitreps_crime_type_state = Sitrep::select(DB::raw(" state_id, 
@@ -1718,5 +1829,187 @@ class SitrepController extends Controller
         return view('sitrep.sitrep.trend_report', 
         compact('info','sitreps_total', 'incident_date', 'sitreps_total_bar'));
     } // End Mehtod
+
+
+   public function MonthlyTrends(Request $request)
+    {
+        $request->validate([
+            'crime_type' => 'required|integer',
+            'start_month' => 'required|integer|min:1|max:12',
+            'end_month' => 'required|integer|min:1|max:12',
+            'year' => 'required|integer',
+            'state_id' => 'nullable|integer'
+        ]);
+
+        $crimeTypeId = $request->crime_type;
+        $startMonth = $request->start_month;
+        $endMonth = $request->end_month;
+        $year = $request->year;
+        $stateId = $request->state_id;
+        // dd($stateId);
+        // Get crime type name
+        $crimeType = Crime_type::find($crimeTypeId);
+        $crimeTypeName = $crimeType ? $crimeType->crime_type : 'Unknown Crime';
+        
+        // Get state name if selected
+        $stateName = null;
+        if ($stateId) {
+            $state = State::find($stateId);
+            $stateName = $state ? $state->name : 'Unknown State';
+        } else {
+            $stateName = 'All States';
+        }
+        
+        // Swap months if start is greater than end
+        if ($startMonth > $endMonth) {
+            $temp = $startMonth;
+            $startMonth = $endMonth;
+            $endMonth = $temp;
+        }
+        
+        // Generate array of months in the selected range
+        $monthRange = [];
+        $monthLabels = [];
+        $monthNames = [
+            '01' => 'January', '02' => 'February', '03' => 'March',
+            '04' => 'April', '05' => 'May', '06' => 'June',
+            '07' => 'July', '08' => 'August', '09' => 'September',
+            '10' => 'October', '11' => 'November', '12' => 'December'
+        ];
+        
+        for ($month = $startMonth; $month <= $endMonth; $month++) {
+            $monthFormatted = str_pad($month, 2, '0', STR_PAD_LEFT);
+            $monthRange[] = $monthFormatted;
+            $monthLabels[] = $monthNames[$monthFormatted];
+        }
+        
+        // Build the query
+        $query = Sitrep::select(
+                DB::raw('MONTH(incident_date) as month'),
+                DB::raw('SUM(number_incident) as total_incidents')
+            )
+            ->where('crime_type', $crimeTypeId)
+            ->whereYear('incident_date', $year)
+            ->whereIn(DB::raw('MONTH(incident_date)'), $monthRange);
+        
+        // Add state filter if provided
+        if ($stateId) {
+            $query->where('state_id', $stateId);
+        }
+        
+        // Complete the query
+        $monthlyTrends = $query->groupBy(DB::raw('MONTH(incident_date)'))
+            ->orderBy('month')
+            ->get();
+        
+        // Initialize data array with zeros for all months in range
+        $trendData = [];
+        foreach ($monthRange as $month) {
+            $monthNum = (int)$month;
+            $found = false;
+            
+            foreach ($monthlyTrends as $trend) {
+                if ($trend->month == $monthNum) {
+                    $trendData[] = $trend->total_incidents;
+                    $found = true;
+                    break;
+                }
+            }
+            
+            if (!$found) {
+                $trendData[] = 0;
+            }
+        }
+        
+        // Calculate statistics
+        $totalIncidents = array_sum($trendData);
+        $averageIncidents = count($trendData) > 0 ? round($totalIncidents / count($trendData), 2) : 0;
+        $maxIncidents = max($trendData);
+        $minIncidents = min($trendData);
+        
+        // Get peak month
+        $peakIndex = array_search($maxIncidents, $trendData);
+        $peakMonth = isset($monthLabels[$peakIndex]) ? $monthLabels[$peakIndex] : 'N/A';
+        
+        // Get comparative data (for all states vs selected state if applicable)
+        $comparativeData = null;
+        if ($stateId) {
+            // Get data for all states for comparison
+            $allStatesQuery = Sitrep::select(
+                    DB::raw('MONTH(incident_date) as month'),
+                    DB::raw('SUM(number_incident) as total_incidents')
+                )
+                ->where('crime_type', $crimeTypeId)
+                ->whereYear('incident_date', $year)
+                ->whereIn(DB::raw('MONTH(incident_date)'), $monthRange)
+                ->groupBy(DB::raw('MONTH(incident_date)'))
+                ->orderBy('month');
+            
+            $allStatesTrends = $allStatesQuery->get();
+            
+            // Prepare comparative data
+            $allStatesData = [];
+            foreach ($monthRange as $month) {
+                $monthNum = (int)$month;
+                $found = false;
+                
+                foreach ($allStatesTrends as $trend) {
+                    if ($trend->month == $monthNum) {
+                        $allStatesData[] = $trend->total_incidents;
+                        $found = true;
+                        break;
+                    }
+                }
+                
+                if (!$found) {
+                    $allStatesData[] = 0;
+                }
+            }
+            
+            $comparativeData = [
+                'state_data' => $trendData,
+                'all_states_data' => $allStatesData,
+                'state_name' => $stateName,
+                'state_total' => array_sum($trendData),
+                'all_states_total' => array_sum($allStatesData)
+            ];
+        }
+        
+        return view('sitrep.sitrep.monthly_trend_report', compact(
+            'crimeTypeName',
+            'stateName',
+            'monthLabels',
+            'trendData',
+            'year',
+            'startMonth',
+            'endMonth',
+            'totalIncidents',
+            'averageIncidents',
+            'maxIncidents',
+            'minIncidents',
+            'peakMonth',
+            'comparativeData'
+        ));
+    }
+    
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     
 }

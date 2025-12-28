@@ -49,7 +49,7 @@
 						<li><a data-bs-toggle="modal" data-bs-target="#exampleModal1"><i class="bx bx-right-arrow-alt"></i>Daily SITREP</a></li>
 						@php  if (Auth::user()->state == "FHQ") { @endphp 
 
-						<li><a data-bs-toggle="modal" data-bs-target="#exampleModal2"><i class="bx bx-right-arrow-alt"></i>Monthly SITREP</a></li>
+						<!-- <li><a data-bs-toggle="modal" data-bs-target="#exampleModal2"><i class="bx bx-right-arrow-alt"></i>Monthly SITREP</a></li> -->
 						<li><a data-bs-toggle="modal" data-bs-target="#exampleModal3"><i class="bx bx-right-arrow-alt"></i>Custom SITREP</a></li>					
 						<li><a data-bs-toggle="modal" data-bs-target="#exampleModal7"><i class="bx bx-right-arrow-alt"></i>Validate SITREP</a></li>					
 					</ul>
@@ -75,7 +75,17 @@
 					</a>
 					<ul>
 						<li><a data-bs-toggle="modal" data-bs-target="#exampleModal9"><i class="bx bx-right-arrow-alt"></i>Yearly Trends </a></li>
-						<li><a data-bs-toggle="modal" data-bs-target="#exampleModa10"><i class="bx bx-right-arrow-alt"></i>Custom Trends</a></li>
+						<li><a data-bs-toggle="modal" data-bs-target="#exampleModal2"><i class="bx bx-right-arrow-alt"></i>Custom Trends</a></li>
+
+
+
+						<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#monthlyTrendModal">
+							<i class="bx bx-line-chart"></i> Generate Monthly Trend
+						</button>
+
+
+
+
 				@php  } @endphp
 					</ul>
 				</li>

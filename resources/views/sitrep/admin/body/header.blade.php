@@ -394,7 +394,7 @@
 	<!-- DAILY SITREP MODAL ENDS -->
 
 	<!-- MONTHLY SITREP MODAL -->
-	<div class="modal fade" id="exampleModal2" tabindex="-1" aria-hidden="true">
+	<div class="modal fade" id="exampleModal22" tabindex="-1" aria-hidden="true">
 		<div class="modal-dialog modal-sm">
 			<div class="modal-content">
 				<div class="modal-header">
@@ -555,7 +555,7 @@
 	</div>
 	<!-- MONTH ON MONTH SITREP MODAL ENDS -->
 
-	<!-- YEARLY SITREP MODAL -->
+	<!-- YEARLY SITREP Trends -->
 	<div class="modal fade" id="exampleModal9" tabindex="-1" aria-hidden="true">
 		<div class="modal-dialog modal-sm">
 			<div class="modal-content">
@@ -585,4 +585,138 @@
 			</div>
 		</div>
 	</div>
-	<!-- YEARLY SITREP MODAL ENDS -->  
+	<!-- YEARLY SITREP Trends ENDS -->  
+
+	<!-- CUSTOM SITREP MODAL -->
+	<div class="modal fade" id="exampleModal2d" tabindex="-1" aria-hidden="true">
+		<div class="modal-dialog modal-sm">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title">Generate Custom Trends</h5>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+				</div>
+				
+			<form action="{{ route('custom.trends')}}" method="POST">
+                  @csrf
+                  <div class="modal-body">
+                  <label for="inputEmail3" class="col-sm-3 col-form-label">From</label>
+                      <input type="date" class="form-control" name="date_from" id="" required>
+                  </div>
+                   <div class="modal-body">
+                  <label for="inputEmail3" class="col-sm-3 col-form-label">To</label>
+                      <input type="date" class="form-control" name="date_to" id="" required>
+                  </div>
+                 			  
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+					<button type="submit" class="btn btn-primary">Generate Custom Trends</button>
+				</div>
+			</form>
+
+			</div>
+		</div>
+	</div>
+	<!-- CUSTOM SITREP MODAL ENDS --> 
+
+	<!-- MONTHLY TREND MODAL -->
+<div class="modal fade" id="monthlyTrendModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Generate Monthly Crime Trend</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            
+            <form action="{{ route('monthly.trends') }}" method="POST">
+                @csrf
+                <div class="modal-body">
+                    <!-- State Selection -->
+                    <div class="mb-3">
+                        <label class="form-label">Select State (Optional)</label>
+                        <select class="form-control" name="state_id">
+                            <option value="">All States</option>
+                            @foreach(App\Models\State::orderBy('name')->get() as $state)
+                                <option value="{{ $state->id }}">{{ $state->name }}</option>
+                            @endforeach
+                        </select>
+                        <small class="text-muted">Leave blank to analyze all states</small>
+                    </div>
+                    
+                    <!-- Crime Type Selection -->
+                    <div class="mb-3">
+                        <label class="form-label">Select Crime Type</label>
+                        <select class="form-control" name="crime_type" required>
+                            <option value="" disabled selected>Select Crime Type</option>
+                            @foreach(App\Models\Crime_type::all() as $crimeType)
+                                <option value="{{ $crimeType->id }}">{{ $crimeType->crime_type }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    
+                    <!-- Start Month Selection -->
+                    <div class="mb-3">
+                        <label class="form-label">Start Month</label>
+                        <select class="form-control" name="start_month" id="start_month" required>
+                            <option value="" disabled selected>Select Start Month</option>
+                            <option value="1">January</option>
+                            <option value="2">February</option>
+                            <option value="3">March</option>
+                            <option value="4">April</option>
+                            <option value="5">May</option>
+                            <option value="6">June</option>
+                            <option value="7">July</option>
+                            <option value="8">August</option>
+                            <option value="9">September</option>
+                            <option value="10">October</option>
+                            <option value="11">November</option>
+                            <option value="12">December</option>
+                        </select>
+                    </div>
+                    
+                    <!-- End Month Selection -->
+                    <div class="mb-3">
+                        <label class="form-label">End Month</label>
+                        <select class="form-control" name="end_month" id="end_month" required>
+                            <option value="" disabled selected>Select End Month</option>
+                            <option value="1">January</option>
+                            <option value="2">February</option>
+                            <option value="3">March</option>
+                            <option value="4">April</option>
+                            <option value="5">May</option>
+                            <option value="6">June</option>
+                            <option value="7">July</option>
+                            <option value="8">August</option>
+                            <option value="9">September</option>
+                            <option value="10">October</option>
+                            <option value="11">November</option>
+                            <option value="12">December</option>
+                        </select>
+                    </div>
+                    
+                    <!-- Year Selection -->
+                    <div class="mb-3">
+                        <label class="form-label">Select Year</label>
+                        <select class="form-control" name="year" id="year_picker" required>
+                            <option value="" disabled selected>Select Year</option>
+                            @php
+                                $currentYear = date('Y');
+                                $startYear = 2020; // Change this to your desired starting year
+                                // Generate years from current year back to start year
+                                for($year = $currentYear; $year >= $startYear; $year--) {
+                                    echo "<option value=\"$year\">$year</option>";
+                                }
+                            @endphp
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Generate Trend</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!-- MONTHLY TREND MODAL ENDS -->
+

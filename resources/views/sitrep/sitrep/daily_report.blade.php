@@ -441,6 +441,8 @@
 													<th style="background-color: lightblue;"> Kidnapping</th>
 													<th style="background-color: lightblue;"> Banditry</th>
 													<th style="background-color: lightblue;"> Terrorism</th>
+													<th style="background-color: lightblue;"> Rape</th>
+													<th style="background-color: lightblue;"> Defilement</th>
 												</tr>
 												</thead>
 												<tbody>
@@ -485,6 +487,19 @@
 														<td align="center"> {{$sitrep->crime5}} </td> 
 														@endif
 
+														@if ($sitrep->crime7 == 0)
+														<td align="center"> - </td>
+														@else
+														<td align="center"> {{$sitrep->crime7}} </td> 
+														@endif
+
+														@if ($sitrep->crime19 == 0)
+														<td align="center"> - </td>
+														@else
+														<td align="center"> {{$sitrep->crime19}} </td> 
+														@endif
+
+
 													</tr>  
 												@endforeach    
 												
@@ -524,6 +539,18 @@
 														<td align="center"> 0 </td>
 														@else
 														<td align="center"> {{$sitrep->crime5}} </td>
+														@endif
+
+														@if ($sitrep->crime7== 0)
+														<td align="center"> 0 </td>
+														@else
+														<td align="center"> {{$sitrep->crime5}} </td>
+														@endif
+
+														@if ($sitrep->crime19== 0)
+														<td align="center"> 0 </td>
+														@else
+														<td align="center"> {{$sitrep->crime19}} </td>
 														@endif
 
 														
@@ -570,7 +597,7 @@
 										</div>
 										<hr>
 										<div>
-											<table id="example1" class="table table-striped table-bordered">
+											<table id="example7" class="table table-striped table-bordered">
 												<thead class="text-dark">
 												<tr>
 													<th>S/N</th>
@@ -1274,6 +1301,18 @@ $(document).ready(function() {
 			
 			table.buttons().container()
 				.appendTo( '#example2_wrapper .col-md-6:eq(0)' );
+		} );
+	</script>
+
+	<script>
+		$(document).ready(function() {
+			var table = $('#example7').DataTable( {
+				lengthChange: false,
+				buttons: [ 'copy', 'excel', 'pdf', 'print']
+			} );
+			
+			table.buttons().container()
+				.appendTo( '#example7_wrapper .col-md-6:eq(0)' );
 		} );
 	</script>
    

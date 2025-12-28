@@ -98,9 +98,9 @@
 											   </br> {{$sitrep_detail->incident_date}}
 											 </td>
 											 <td class="vertical-text-table"><b>Incident Narration:</b></td>
-											 <td colspan="6">{{$sitrep_detail->crime_description}}</td>
-											 <td class="vertical-text-table"><b>Police Action :</b></td>
-											 <td colspan="5">{{$sitrep_detail->police_action}}</td>
+											 <td colspan="12">{{$sitrep_detail->crime_description}}</td>
+											 <!-- <td class="vertical-text-table"><b>Police Action :</b></td>
+											 <td colspan="5">{{$sitrep_detail->police_action}}</td> -->
 											 <td><a class="btn btn-success" href="{{route('admin.edit.sitrep', $sitrep->id)}}">Edit  </a></td>
 											 </tr>
 											 @endforeach

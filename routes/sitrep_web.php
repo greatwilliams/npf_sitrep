@@ -78,8 +78,11 @@ Route::middleware(['auth', 'role:admin'])->group(function(){
 
     // SITREP TRENDS` 
     Route::post('/yearly/trends', [SitrepController::class, 'Yearlytrends'])->name('yearly.trends');
-    Route::post('/monthly/trends', [SitrepController::class, 'Monthlytrends'])->name('monthly.trends');
+    // Route::post('/monthly/trends', [SitrepController::class, 'Monthlytrends'])->name('monthly.trends');
     Route::post('/custom/trends', [SitrepController::class, 'Customtrends'])->name('custom.trends');
+    // Route::post('/monthly/trends', [SitrepController::class, 'MonthlyTrends'])->name('monthly.trends');
+    Route::post('/monthly/trends', [SitrepController::class, 'MonthlyTrends'])->name('monthly.trends');
+
 
 
 });
@@ -117,7 +120,6 @@ Route::middleware(['auth', 'role:user'])->group(function(){
     Route::post('/user/update/password', [UserController::class, 'UserUpdatePassword'])->name('update.password');
 });
 Route::get('/user/login', [UserController::class, 'UserLogin']);
-Route::post('/edit/update/', [SitrepController::class, 'UpdateSitrep'])->name('admin.update.sitrep');
 
 // GENERAL ROUTES
 Route::middleware('auth')->group(function () {
@@ -147,8 +149,8 @@ Route::middleware('auth')->group(function () {
     Route::post('/state/submit/trend/', [SitrepController::class, 'StateSubmittrend'])->name('state.submit.trend');
     Route::get('/edit/trend/{id}', [SitrepController::class, 'Edittrend'])->name('admin.edit.trend');
     Route::get('/state/edit/trend/{id}', [SitrepController::class, 'StateEdittrend'])->name('state.edit.trend');
-    Route::post('/edit/update/', [SitrepController::class, 'Updatetrend'])->name('admin.update.trend');
-    Route::post('/edit/state/', [SitrepController::class, 'StateUpdatetrend'])->name('state.update.trend');
+    Route::post('/edit/update/trend/', [SitrepController::class, 'Updatetrend'])->name('admin.update.trend');
+    Route::post('/edit/state/trend/', [SitrepController::class, 'StateUpdatetrend'])->name('state.update.trend');
    // Route::get('/oedit/admin/{id}', 'admin_edit_trend')->name('admin.edit.trend'); 
     Route::get('/admin/trend', [SitrepController::class, 'Viewtrend'])->name('view.admin.trend'); 
     Route::get('/ioo_state/trend', [SitrepController::class, 'ViewStatetrend'])->name('view.ioo_state.trend'); 

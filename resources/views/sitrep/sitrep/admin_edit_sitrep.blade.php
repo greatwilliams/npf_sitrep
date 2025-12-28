@@ -160,15 +160,15 @@
                         @foreach ($sitrep_details as $sitrep_detail)
                         @endforeach
 
-                        <div class="col-6">
+                        <div class="col-12">
                             <label for="inputAddress" class="form-label">Incident Details</label>
                             <textarea class="form-control" required name="crime_description" rows="5">{{ $sitrep_detail->crime_description}}</textarea>
                         </div>
 
-                        <div class="col-6">
+                        <!-- <div class="col-6">
                             <label for="inputAddress2" class="form-label">Police Actions/Response</label>
-                            <textarea class="form-control" required name="police_action" rows="5">{{ $sitrep_detail->police_action}}</textarea>
-                        </div>
+                            <textarea class="form-control"  name="police_action" rows="5">sitrep_detail->police_action</textarea>
+                        </div> -->
                         <input type="hidden" name="sid" value="{{$sitrep_detail->id}}">
                         <input type="hidden" name="id" value="{{$sitreps->id}}">
                         <input type="hidden" name="sitrep_id" value="{{$sitreps->sitrep_id}}">
