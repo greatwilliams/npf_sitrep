@@ -421,7 +421,7 @@
 			</div>
 		</div>
 	</div>
-	<!-- MONTHLY SITREP MODAL ENDS -->
+	<!-- MONTHLY SITREP MODAL ENDS --> 
 
 
 	<!-- CUSTOM SITREP MODAL  -->
@@ -554,3 +554,35 @@
 		</div>
 	</div>
 	<!-- MONTH ON MONTH SITREP MODAL ENDS -->
+
+	<!-- YEARLY SITREP MODAL -->
+	<div class="modal fade" id="exampleModal9" tabindex="-1" aria-hidden="true">
+		<div class="modal-dialog modal-sm">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title">Generate Yearly Trends  </h5>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+				</div>
+				
+
+
+				<form action="{{ route('yearly.trends')}}" method="POST">
+                  @csrf
+                  <div class="modal-body">
+                  <label for="inputEmail3" class="col-sm-3 col-form-label"> Select Year</label>
+				  		<select class="form-control" name="date_from" id="year_picker" required>
+							<option value="" disabled selected>Select Year</option>
+						</select>
+                  </div>
+                  
+                 			  
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+					<button type="submit" class="btn btn-primary">Generate Report </button>
+				</div>
+			</form>
+
+			</div>
+		</div>
+	</div>
+	<!-- YEARLY SITREP MODAL ENDS -->  

@@ -141,15 +141,17 @@
 									<input class="form-control" type='text' name='location' required>
 								</div>
 
-								<div class="col-6">
+								<div class="col-12">
 									<label for="inputAddress" class="form-label">Incident Details</label>
 									<textarea class="form-control" required name="crime_description" rows="5">Narration should be concise.</textarea>
 								</div>
 
-								<div class="col-6">
+								
+								<!-- <div class="col-6">
 									<label for="inputAddress2" class="form-label">Police Actions/Response</label>
 									<textarea class="form-control" required name="police_action" rows="5">Police Action should be concise.</textarea>
-								</div>
+								</div> -->
+								<input class="form-control" type='hidden' name='police_action' value=".">
 
 								<div class="col-12">
 									<table id="crimeTable" class="table table-striped table-bordered" style="width:100%">

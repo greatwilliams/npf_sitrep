@@ -76,6 +76,11 @@ Route::middleware(['auth', 'role:admin'])->group(function(){
     Route::post('/monthly/analysis', [SitrepController::class, 'MonthlyAnalysis'])->name('monthly.analysis');
     Route::post('/custom/analysis', [SitrepController::class, 'CustomanAlysis'])->name('custom.analysis');
 
+    // SITREP TRENDS` 
+    Route::post('/yearly/trends', [SitrepController::class, 'Yearlytrends'])->name('yearly.trends');
+    Route::post('/monthly/trends', [SitrepController::class, 'Monthlytrends'])->name('monthly.trends');
+    Route::post('/custom/trends', [SitrepController::class, 'Customtrends'])->name('custom.trends');
+
 
 });
 Route::get('/admin/login', [AdminController::class, 'AdminLogin']);
@@ -112,6 +117,7 @@ Route::middleware(['auth', 'role:user'])->group(function(){
     Route::post('/user/update/password', [UserController::class, 'UserUpdatePassword'])->name('update.password');
 });
 Route::get('/user/login', [UserController::class, 'UserLogin']);
+Route::post('/edit/update/', [SitrepController::class, 'UpdateSitrep'])->name('admin.update.sitrep');
 
 // GENERAL ROUTES
 Route::middleware('auth')->group(function () {
@@ -127,6 +133,26 @@ Route::middleware('auth')->group(function () {
     Route::get('/ioo/sitrep', [SitrepController::class, 'ViewSitrep'])->name('view.ioo.sitrep'); 
     Route::get('/ioo_state/sitrep', [SitrepController::class, 'ViewStateSitrep'])->name('view.ioo_state.sitrep'); 
     // Route::get('/all/sitrep', [SitrepController::class, 'ViewSitrepALL'])->name('view.all.sitrep');
+
+    Route::get('/locations', [SitrepController::class, 'index'])->name('locations.index');
+    Route::get('/get-cities', [SitrepController::class, 'getCities'])->name('locations.get_cities');
+
+});
+
+// TRENDS ROUTES
+Route::middleware('auth')->group(function () {
+    Route::get('/admin/add/trend/', [SitrepController::class, 'AdminAddtrend'])->name('admin.add.trend'); 
+    Route::get('/state/add/trend/', [SitrepController::class, 'StateAddtrend'])->name('state.add.trend'); 
+    Route::post('/admin/submit/trend/', [SitrepController::class, 'AdminSubmittrend'])->name('admin.submit.trend');
+    Route::post('/state/submit/trend/', [SitrepController::class, 'StateSubmittrend'])->name('state.submit.trend');
+    Route::get('/edit/trend/{id}', [SitrepController::class, 'Edittrend'])->name('admin.edit.trend');
+    Route::get('/state/edit/trend/{id}', [SitrepController::class, 'StateEdittrend'])->name('state.edit.trend');
+    Route::post('/edit/update/', [SitrepController::class, 'Updatetrend'])->name('admin.update.trend');
+    Route::post('/edit/state/', [SitrepController::class, 'StateUpdatetrend'])->name('state.update.trend');
+   // Route::get('/oedit/admin/{id}', 'admin_edit_trend')->name('admin.edit.trend'); 
+    Route::get('/admin/trend', [SitrepController::class, 'Viewtrend'])->name('view.admin.trend'); 
+    Route::get('/ioo_state/trend', [SitrepController::class, 'ViewStatetrend'])->name('view.ioo_state.trend'); 
+    // Route::get('/all/trend', [SitrepController::class, 'ViewtrendALL'])->name('view.all.trend');
 
     Route::get('/locations', [SitrepController::class, 'index'])->name('locations.index');
     Route::get('/get-cities', [SitrepController::class, 'getCities'])->name('locations.get_cities');

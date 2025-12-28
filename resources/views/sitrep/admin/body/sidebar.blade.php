@@ -64,6 +64,18 @@
 						<li><a data-bs-toggle="modal" data-bs-target="#exampleModal4"><i class="bx bx-right-arrow-alt"></i>Year-on-Year Analysis</a></li>
 						<li><a data-bs-toggle="modal" data-bs-target="#exampleModal5"><i class="bx bx-right-arrow-alt"></i>Month-on-Month Analysis</a></li>
 						<li><a data-bs-toggle="modal" data-bs-target="#exampleModal6"><i class="bx bx-right-arrow-alt"></i>Custom Analysis</a></li>
+					</ul>
+				</li>
+
+				<li>
+					<a href="javascript:;" class="has-arrow">
+						<div class="parent-icon"><i class="bx bx-category"></i>
+						</div>
+						<div class="menu-title">Crime Trends</div>
+					</a>
+					<ul>
+						<li><a data-bs-toggle="modal" data-bs-target="#exampleModal9"><i class="bx bx-right-arrow-alt"></i>Yearly Trends </a></li>
+						<li><a data-bs-toggle="modal" data-bs-target="#exampleModa10"><i class="bx bx-right-arrow-alt"></i>Custom Trends</a></li>
 				@php  } @endphp
 					</ul>
 				</li>

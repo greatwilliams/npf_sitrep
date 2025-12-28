@@ -118,7 +118,7 @@ class AdminController extends Controller
             ->whereBetween('incident_date', [$date_from, $date_to])
             // ->where('sitrep_id','=',$sitrep_id)
             ->groupBy('state_id')
-            // ->orderBy('crime_type')
+            ->orderBy('state_id')
             ->get();
 
          // THIS DISPLAYS THE NUMBER OF INCIDENTS CHARTS BY CRIME TYPE
@@ -142,6 +142,7 @@ class AdminController extends Controller
             // ->where('sitrep_id','=',$sitrep_id)
             ->groupBy('crime_type')
             // ->orderBy('crime_type')
+            ->orderByRaw("FIELD(crime_type, 36, 31, 47) ASC")
             ->get();
 
             // THIS DISPLAYS THE NUMBER OF INCIDENTS CHARTS BY CRIME TYPE & STATE

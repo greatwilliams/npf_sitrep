@@ -587,7 +587,7 @@ class SitrepController extends Controller
             ->whereBetween('incident_date', [$date_from, $date_to])
             // ->where('sitrep_id','=',$sitrep_id)
             ->groupBy('state_id')
-            // ->orderBy('crime_type')
+            // ->orderBy('state_id')
             ->get();
 
          // THIS DISPLAYS THE NUMBER OF INCIDENTS CHARTS BY CRIME TYPE
@@ -768,7 +768,7 @@ class SitrepController extends Controller
             ->whereBetween('incident_date', [$date_from, $date_to])
             // ->where('sitrep_id','=',$sitrep_id)
             ->groupBy('state_id')
-            // ->orderBy('crime_type')
+            ->orderBy('state_id')
             ->get();
 
          // THIS DISPLAYS THE NUMBER OF INCIDENTS CHARTS BY CRIME TYPE
@@ -856,300 +856,179 @@ class SitrepController extends Controller
         return view('sitrep.sitrep.daily_report', compact('sitreps','sitrep_details','info','sitreps_state_total','sitreps_total','sitreps_crime_type','sitreps_crime_type_state','incident_date','groupby_type','groupby_name'));
     } // End Mehtod 
 
-    // public function CustomReport(Request $request)
-    // {
-    //     // dd($request->all());
+   public function CustomReport(Request $request)
+    {
+        // dd($request->all());
         
-    //     $date_from = $request->date_from;
-    //     $date_to = $request->date_to;
-    //     $incident_date = $date_from;
-    //     $incident_date2 = $date_to;
+        $date_from = $request->date_from;
+        $date_to = $request->date_to;
+        $incident_date = $date_from;
+        $incident_date2 = $date_to;
                
-    //     // THIS CALCULATES THE TOTAL OF EACH INCIDENT
-    //     $sitreps_total = Sitrep::select(DB::raw(" 
-    //         SUM(CASE WHEN crime_type = 1 THEN `number_incident` ELSE 0 END) AS crime1
-    //         , SUM(CASE WHEN crime_type = 2 THEN `number_incident` ELSE 0 END) AS crime2
-    //         , SUM(CASE WHEN crime_type = 3 THEN `number_incident` ELSE 0 END) AS crime3
-    //         , SUM(CASE WHEN crime_type = 4 THEN `number_incident` ELSE 0 END) AS crime4
-    //         , SUM(CASE WHEN crime_type = 5 THEN `number_incident` ELSE 0 END) AS crime5
-    //         , SUM(CASE WHEN crime_type = 6 THEN `number_incident` ELSE 0 END) AS crime6
-    //         , SUM(CASE WHEN crime_type = 7 THEN `number_incident` ELSE 0 END) AS crime7
-    //         , SUM(CASE WHEN crime_type = 8 THEN `number_incident` ELSE 0 END) AS crime8
-    //         , SUM(CASE WHEN crime_type = 9 THEN `number_incident` ELSE 0 END) AS crime9
-    //         , SUM(CASE WHEN crime_type = 10 THEN `number_incident` ELSE 0 END) AS crime10
-    //         , SUM(CASE WHEN crime_type = 11 THEN `number_incident` ELSE 0 END) AS crime11
-    //         , SUM(CASE WHEN crime_type = 12 THEN `number_incident` ELSE 0 END) AS crime12
-    //         , SUM(CASE WHEN crime_type = 13 THEN `number_incident` ELSE 0 END) AS crime13
-    //         , SUM(CASE WHEN crime_type = 14 THEN `number_incident` ELSE 0 END) AS crime14
-    //         , SUM(CASE WHEN crime_type = 15 THEN `number_incident` ELSE 0 END) AS crime15
-    //         , SUM(CASE WHEN crime_type = 16 THEN `number_incident` ELSE 0 END) AS crime16
-    //         , SUM(CASE WHEN crime_type = 17 THEN `number_incident` ELSE 0 END) AS crime17
-    //         , SUM(CASE WHEN crime_type = 18 THEN `number_incident` ELSE 0 END) AS crime18
-    //         , SUM(CASE WHEN crime_type = 19 THEN `number_incident` ELSE 0 END) AS crime19
-    //         , SUM(CASE WHEN crime_type = 20 THEN `number_incident` ELSE 0 END) AS crime20
-    //         , SUM(`number_incident`) as total_fireamrs"))
-    //             ->where(function ($query) {
-    //                 $query
-    //                 ->where('crime_type','=',1)
-    //                 ->orwhere('crime_type','=',2)
-    //                 ->orwhere('crime_type','=',3)
-    //                 ->orwhere('crime_type','=',4)
-    //                 ->orwhere('crime_type','=',5)
-    //                 ->orwhere('crime_type','=',6)
-    //                 ->orwhere('crime_type','=',7)
-    //                 ->orwhere('crime_type','=',8)
-    //                 ->orwhere('crime_type','=',15)
-    //                 ->orwhere('crime_type','=',17)
-    //                 ->orwhere('crime_type','=',21);
-    //             })
-    //         ->whereBetween('incident_date', [$date_from, $date_to])
-    //         ->get();
+        // THIS CALCULATES THE TOTAL OF EACH INCIDENT
+        $sitreps_state_group = Sitrep::select(DB::raw(" state_id,
+            SUM(CASE WHEN crime_type = 1 THEN `number_incident` ELSE 0 END) AS crime1
+            , SUM(CASE WHEN crime_type = 2 THEN `number_incident` ELSE 0 END) AS crime2
+            , SUM(CASE WHEN crime_type = 3 THEN `number_incident` ELSE 0 END) AS crime3
+            , SUM(CASE WHEN crime_type = 4 THEN `number_incident` ELSE 0 END) AS crime4
+            , SUM(CASE WHEN crime_type = 5 THEN `number_incident` ELSE 0 END) AS crime5
+            , SUM(CASE WHEN crime_type = 6 THEN `number_incident` ELSE 0 END) AS crime6
+            , SUM(CASE WHEN crime_type = 7 THEN `number_incident` ELSE 0 END) AS crime7
+            , SUM(CASE WHEN crime_type = 8 THEN `number_incident` ELSE 0 END) AS crime8
+            , SUM(CASE WHEN crime_type = 9 THEN `number_incident` ELSE 0 END) AS crime9
+            , SUM(CASE WHEN crime_type = 10 THEN `number_incident` ELSE 0 END) AS crime10
+            , SUM(CASE WHEN crime_type = 11 THEN `number_incident` ELSE 0 END) AS crime11
+            , SUM(CASE WHEN crime_type = 12 THEN `number_incident` ELSE 0 END) AS crime12
+            , SUM(CASE WHEN crime_type = 13 THEN `number_incident` ELSE 0 END) AS crime13
+            , SUM(CASE WHEN crime_type = 14 THEN `number_incident` ELSE 0 END) AS crime14
+            , SUM(CASE WHEN crime_type = 15 THEN `number_incident` ELSE 0 END) AS crime15
+            , SUM(CASE WHEN crime_type = 16 THEN `number_incident` ELSE 0 END) AS crime16
+            , SUM(CASE WHEN crime_type = 17 THEN `number_incident` ELSE 0 END) AS crime17
+            , SUM(CASE WHEN crime_type = 18 THEN `number_incident` ELSE 0 END) AS crime18
+            , SUM(CASE WHEN crime_type = 19 THEN `number_incident` ELSE 0 END) AS crime19
+            , SUM(CASE WHEN crime_type = 20 THEN `number_incident` ELSE 0 END) AS crime20
+            , SUM(`number_incident`) as total_fireamrs"))
+                ->where(function ($query) {
+                    $query
+                    ->where('crime_type','=',1)
+                    ->orwhere('crime_type','=',2)
+                    ->orwhere('crime_type','=',3)
+                    ->orwhere('crime_type','=',4)
+                    ->orwhere('crime_type','=',5)
+                    ->orwhere('crime_type','=',6)
+                    ->orwhere('crime_type','=',7)
+                    ->orwhere('crime_type','=',8)
+                    ->orwhere('crime_type','=',15)
+                    ->orwhere('crime_type','=',17)
+                    ->orwhere('crime_type','=',21);
+                })
+            ->whereBetween('incident_date', [$date_from, $date_to])
+            ->groupBy('state_id')
+            ->orderBy('state_id')
+            ->get();
         
-    //     // THIS DISPLAYS THE INCIDENTS AND POLICE ACTIONS
-    //     $sitrep_details = Sitrep_Detail::select(DB::raw(" * "))
-    //     ->whereBetween('incident_date', [$date_from, $date_to])
-    //     ->orderBy('state_id')
-    //     ->get(); 
-    //     // dd($sitreps);
+      
+        // dd($sitreps_state_group);
 
-    //     // THIS DISPLAYS THE NUMBER OF INCIDENTS CHARTS BY STATE
-    //     $sitreps = Sitrep::select(DB::raw(" state_id,  
-    //             SUM(number_incident) AS number_incident, 
-    //             SUM(number_victims) AS number_victims, 
-    //             SUM(number_victims_injured) AS number_victims_injured,
-    //             SUM(number_casualties) AS number_casualties,
-    //             SUM(number_victims_rescused) AS number_victims_rescused, 
-    //             SUM(number_arrest) AS number_arrest,
-    //             SUM(suspect_casualties) AS suspect_casualties, 
-    //             SUM(number_firearms) AS number_firearms, 
-    //             SUM(number_dane_gun) AS number_dane_gun,
-    //             SUM(number_ammunition) AS number_ammunition, 
-    //             SUM(number_caterages) AS number_caterages, 
-    //             SUM(number_vehicle) AS number_vehicle,
-    //             SUM(police_casualties) AS police_casualties, 
-    //             SUM(operative_casualties) AS operative_casualties, 
-    //             SUM(number_others) AS number_others"))
-    //         ->whereBetween('incident_date', [$date_from, $date_to])
-    //         // ->where('sitrep_id','=',$sitrep_id)
-    //         ->groupBy('state_id')
-    //         // ->orderBy('crime_type')
-    //         ->get();
-
-    //      // THIS DISPLAYS THE NUMBER OF INCIDENTS CHARTS BY CRIME TYPE
-    //     $sitreps_crime_type = Sitrep::select(DB::raw(" crime_type,  
-    //             SUM(number_incident) AS number_incident, 
-    //             SUM(number_victims) AS number_victims, 
-    //             SUM(number_victims_injured) AS number_victims_injured,
-    //             SUM(number_casualties) AS number_casualties,
-    //             SUM(number_victims_rescused) AS number_victims_rescused, 
-    //             SUM(number_arrest) AS number_arrest,
-    //             SUM(suspect_casualties) AS suspect_casualties, 
-    //             SUM(number_firearms) AS number_firearms, 
-    //             SUM(number_dane_gun) AS number_dane_gun,
-    //             SUM(number_ammunition) AS number_ammunition, 
-    //             SUM(number_caterages) AS number_caterages, 
-    //             SUM(number_vehicle) AS number_vehicle,
-    //             SUM(police_casualties) AS police_casualties, 
-    //             SUM(operative_casualties) AS operative_casualties, 
-    //             SUM(number_others) AS number_others"))
-    //         ->whereBetween('incident_date', [$date_from, $date_to])
-    //         // ->where('sitrep_id','=',$sitrep_id)
-    //         ->groupBy('crime_type')
-    //         // ->orderBy('crime_type')
-    //         ->get();
-
-    //         // THIS DISPLAYS THE NUMBER OF INCIDENTS CHARTS BY CRIME TYPE & STATE
-    //     $sitreps_crime_type_state = Sitrep::select(DB::raw(" state_id, 
-    //             SUM(number_incident) AS number_incident, 
-    //             SUM(number_victims) AS number_victims, 
-    //             SUM(number_victims_injured) AS number_victims_injured,
-    //             SUM(number_casualties) AS number_casualties,
-    //             SUM(number_victims_rescused) AS number_victims_rescused, 
-    //             SUM(number_arrest) AS number_arrest,
-    //             SUM(suspect_casualties) AS suspect_casualties, 
-    //             SUM(number_firearms) AS number_firearms, 
-    //             SUM(number_dane_gun) AS number_dane_gun,
-    //             SUM(number_ammunition) AS number_ammunition, 
-    //             SUM(number_caterages) AS number_caterages, 
-    //             SUM(number_vehicle) AS number_vehicle,
-    //             SUM(police_casualties) AS police_casualties, 
-    //             SUM(operative_casualties) AS operative_casualties, 
-    //             SUM(number_others) AS number_others"))
-    //         ->whereBetween('incident_date', [$date_from, $date_to])
-    //         // ->where('sitrep_id','=',$sitrep_id)
-    //         ->groupBy('state_id')
-    //         // ->groupBy('crime_type')
-    //         // ->orderBy('')
-    //         ->get();
-
-    //     // dd($sitreps_crime_type_state);
-
-
-    //     // THIS DISPLAYS THE TOTAL NUMBER OF INCIDENTS 
-    //     $sitreps_state_total = Sitrep::select(DB::raw(" 
-    //     SUM(number_incident) AS number_incident, 
-    //     SUM(number_victims) AS number_victims, 
-    //     SUM(number_victims_injured) AS number_victims_injured,
-    //     SUM(number_casualties) AS number_casualties,
-    //     SUM(number_victims_rescused) AS number_victims_rescused, 
-    //     SUM(number_arrest) AS number_arrest,
-    //     SUM(suspect_casualties) AS suspect_casualties, 
-    //     SUM(number_firearms) AS number_firearms, 
-    //     SUM(number_dane_gun) AS number_dane_gun,
-    //     SUM(number_ammunition) AS number_ammunition, 
-    //     SUM(number_caterages) AS number_caterages, 
-    //     SUM(number_vehicle) AS number_vehicle,
-    //     SUM(police_casualties) AS police_casualties, 
-    //     SUM(operative_casualties) AS operative_casualties, 
-    //     SUM(number_others) AS number_others"))
-    //     ->whereBetween('incident_date', [$date_from, $date_to])
-    //     // ->where('sitrep_id','=',$sitrep_id)
-    //     // ->groupBy('state_id')
-    //     // ->orderBy('crime_type')
-    //     ->get();
+        // THIS CALCULATES THE TOTAL OF EACH INCIDENT
+        $sitreps_total = Sitrep::select(DB::raw(" 
+            SUM(CASE WHEN crime_type = 1 THEN `number_incident` ELSE 0 END) AS crime1
+            , SUM(CASE WHEN crime_type = 2 THEN `number_incident` ELSE 0 END) AS crime2
+            , SUM(CASE WHEN crime_type = 3 THEN `number_incident` ELSE 0 END) AS crime3
+            , SUM(CASE WHEN crime_type = 4 THEN `number_incident` ELSE 0 END) AS crime4
+            , SUM(CASE WHEN crime_type = 5 THEN `number_incident` ELSE 0 END) AS crime5
+            , SUM(CASE WHEN crime_type = 6 THEN `number_incident` ELSE 0 END) AS crime6
+            , SUM(CASE WHEN crime_type = 7 THEN `number_incident` ELSE 0 END) AS crime7
+            , SUM(CASE WHEN crime_type = 8 THEN `number_incident` ELSE 0 END) AS crime8
+            , SUM(CASE WHEN crime_type = 9 THEN `number_incident` ELSE 0 END) AS crime9
+            , SUM(CASE WHEN crime_type = 10 THEN `number_incident` ELSE 0 END) AS crime10
+            , SUM(CASE WHEN crime_type = 11 THEN `number_incident` ELSE 0 END) AS crime11
+            , SUM(CASE WHEN crime_type = 12 THEN `number_incident` ELSE 0 END) AS crime12
+            , SUM(CASE WHEN crime_type = 13 THEN `number_incident` ELSE 0 END) AS crime13
+            , SUM(CASE WHEN crime_type = 14 THEN `number_incident` ELSE 0 END) AS crime14
+            , SUM(CASE WHEN crime_type = 15 THEN `number_incident` ELSE 0 END) AS crime15
+            , SUM(CASE WHEN crime_type = 16 THEN `number_incident` ELSE 0 END) AS crime16
+            , SUM(CASE WHEN crime_type = 17 THEN `number_incident` ELSE 0 END) AS crime17
+            , SUM(CASE WHEN crime_type = 18 THEN `number_incident` ELSE 0 END) AS crime18
+            , SUM(CASE WHEN crime_type = 19 THEN `number_incident` ELSE 0 END) AS crime19
+            , SUM(CASE WHEN crime_type = 20 THEN `number_incident` ELSE 0 END) AS crime20
+            , SUM(`number_incident`) as total_fireamrs"))
+                ->where(function ($query) {
+                    $query
+                    ->where('crime_type','=',1)
+                    ->orwhere('crime_type','=',2)
+                    ->orwhere('crime_type','=',3)
+                    ->orwhere('crime_type','=',4)
+                    ->orwhere('crime_type','=',5)
+                    ->orwhere('crime_type','=',6)
+                    ->orwhere('crime_type','=',7)
+                    ->orwhere('crime_type','=',8)
+                    ->orwhere('crime_type','=',15)
+                    ->orwhere('crime_type','=',17)
+                    ->orwhere('crime_type','=',21);
+                })
+            ->whereBetween('incident_date', [$date_from, $date_to])
+            ->get();
         
-
-
-
-    //     $groupby_type = 'state_id';
-    //     $groupby_name = 'state_id';
-    //     $incident_date1=date_create($date_from);
-    //     $incident_date2=date_create($date_to);
-    //     $incident_date=$date_from; 
-
-    //     $info = 'Date: '.date_format($incident_date1,"d/m/Y").' - '.date_format($incident_date2,"d/m/Y").'';
-    //     return view('sitrep.sitrep.daily_report', compact('sitreps','sitrep_details','info','sitreps_state_total','sitreps_total','sitreps_crime_type','sitreps_crime_type_state','incident_date','groupby_type','groupby_name'));
-    // } // End Mehtod 
-
-    public function CustomReport(Request $request)
-{
-    // dd($request->all());
-    
-    $date_from = $request->date_from;
-    $date_to = $request->date_to;
-    $incident_date = $date_from;
-    $incident_date2 = $date_to;
-           
-    // THIS CALCULATES THE TOTAL OF EACH INCIDENT
-    $sitreps_total = Sitrep::select(DB::raw(" 
-        SUM(CASE WHEN crime_type = 1 THEN `number_incident` ELSE 0 END) AS crime1
-        , SUM(CASE WHEN crime_type = 2 THEN `number_incident` ELSE 0 END) AS crime2
-        , SUM(CASE WHEN crime_type = 3 THEN `number_incident` ELSE 0 END) AS crime3
-        , SUM(CASE WHEN crime_type = 4 THEN `number_incident` ELSE 0 END) AS crime4
-        , SUM(CASE WHEN crime_type = 5 THEN `number_incident` ELSE 0 END) AS crime5
-        , SUM(CASE WHEN crime_type = 6 THEN `number_incident` ELSE 0 END) AS crime6
-        , SUM(CASE WHEN crime_type = 7 THEN `number_incident` ELSE 0 END) AS crime7
-        , SUM(CASE WHEN crime_type = 8 THEN `number_incident` ELSE 0 END) AS crime8
-        , SUM(CASE WHEN crime_type = 9 THEN `number_incident` ELSE 0 END) AS crime9
-        , SUM(CASE WHEN crime_type = 10 THEN `number_incident` ELSE 0 END) AS crime10
-        , SUM(CASE WHEN crime_type = 11 THEN `number_incident` ELSE 0 END) AS crime11
-        , SUM(CASE WHEN crime_type = 12 THEN `number_incident` ELSE 0 END) AS crime12
-        , SUM(CASE WHEN crime_type = 13 THEN `number_incident` ELSE 0 END) AS crime13
-        , SUM(CASE WHEN crime_type = 14 THEN `number_incident` ELSE 0 END) AS crime14
-        , SUM(CASE WHEN crime_type = 15 THEN `number_incident` ELSE 0 END) AS crime15
-        , SUM(CASE WHEN crime_type = 16 THEN `number_incident` ELSE 0 END) AS crime16
-        , SUM(CASE WHEN crime_type = 17 THEN `number_incident` ELSE 0 END) AS crime17
-        , SUM(CASE WHEN crime_type = 18 THEN `number_incident` ELSE 0 END) AS crime18
-        , SUM(CASE WHEN crime_type = 19 THEN `number_incident` ELSE 0 END) AS crime19
-        , SUM(CASE WHEN crime_type = 20 THEN `number_incident` ELSE 0 END) AS crime20
-        , SUM(`number_incident`) as total_fireamrs"))
-            ->where(function ($query) {
-                $query
-                ->where('crime_type','=',1)
-                ->orwhere('crime_type','=',2)
-                ->orwhere('crime_type','=',3)
-                ->orwhere('crime_type','=',4)
-                ->orwhere('crime_type','=',5)
-                ->orwhere('crime_type','=',6)
-                ->orwhere('crime_type','=',7)
-                ->orwhere('crime_type','=',8)
-                ->orwhere('crime_type','=',15)
-                ->orwhere('crime_type','=',17)
-                ->orwhere('crime_type','=',21);
-            })
+        // THIS DISPLAYS THE INCIDENTS AND POLICE ACTIONS
+        $sitrep_details = Sitrep_Detail::select(DB::raw(" * "))
         ->whereBetween('incident_date', [$date_from, $date_to])
-        ->get();
-    
-    // THIS DISPLAYS THE INCIDENTS AND POLICE ACTIONS
-    $sitrep_details = Sitrep_Detail::select(DB::raw(" * "))
-    ->whereBetween('incident_date', [$date_from, $date_to])
-    ->orderBy('state_id')
-    ->get(); 
-    // dd($sitreps);
+        ->orderBy('state_id')
+        ->get(); 
+        // dd($sitreps_total);
 
-    // THIS DISPLAYS THE NUMBER OF INCIDENTS CHARTS BY STATE
-    $sitreps = Sitrep::select(DB::raw(" state_id,  
-            SUM(number_incident) AS number_incident, 
-            SUM(number_victims) AS number_victims, 
-            SUM(number_victims_injured) AS number_victims_injured,
-            SUM(number_casualties) AS number_casualties,
-            SUM(number_victims_rescused) AS number_victims_rescused, 
-            SUM(number_arrest) AS number_arrest,
-            SUM(suspect_casualties) AS suspect_casualties, 
-            SUM(number_firearms) AS number_firearms, 
-            SUM(number_dane_gun) AS number_dane_gun,
-            SUM(number_ammunition) AS number_ammunition, 
-            SUM(number_caterages) AS number_caterages, 
-            SUM(number_vehicle) AS number_vehicle,
-            SUM(police_casualties) AS police_casualties, 
-            SUM(operative_casualties) AS operative_casualties, 
-            SUM(number_others) AS number_others"))
-        ->whereBetween('incident_date', [$date_from, $date_to])
-        // ->where('sitrep_id','=',$sitrep_id)
-        ->groupBy('state_id')
-        // ->orderBy('crime_type')
-        ->get();
+        // THIS DISPLAYS THE NUMBER OF INCIDENTS CHARTS BY STATE
+        $sitreps = Sitrep::select(DB::raw(" state_id,  
+                SUM(number_incident) AS number_incident, 
+                SUM(number_victims) AS number_victims, 
+                SUM(number_victims_injured) AS number_victims_injured,
+                SUM(number_casualties) AS number_casualties,
+                SUM(number_victims_rescused) AS number_victims_rescused, 
+                SUM(number_arrest) AS number_arrest,
+                SUM(suspect_casualties) AS suspect_casualties, 
+                SUM(number_firearms) AS number_firearms, 
+                SUM(number_dane_gun) AS number_dane_gun,
+                SUM(number_ammunition) AS number_ammunition, 
+                SUM(number_caterages) AS number_caterages, 
+                SUM(number_vehicle) AS number_vehicle,
+                SUM(police_casualties) AS police_casualties, 
+                SUM(operative_casualties) AS operative_casualties, 
+                SUM(number_others) AS number_others"))
+            ->whereBetween('incident_date', [$date_from, $date_to])
+            // ->where('sitrep_id','=',$sitrep_id)
+            ->groupBy('state_id')
+            ->orderBy('state_id', 'ASC')
+            ->get();
 
-     // THIS DISPLAYS THE NUMBER OF INCIDENTS CHARTS BY CRIME TYPE
-    $sitreps_crime_type = Sitrep::select(DB::raw(" crime_type,  
-            SUM(number_incident) AS number_incident, 
-            SUM(number_victims) AS number_victims, 
-            SUM(number_victims_injured) AS number_victims_injured,
-            SUM(number_casualties) AS number_casualties,
-            SUM(number_victims_rescused) AS number_victims_rescused, 
-            SUM(number_arrest) AS number_arrest,
-            SUM(suspect_casualties) AS suspect_casualties, 
-            SUM(number_firearms) AS number_firearms, 
-            SUM(number_dane_gun) AS number_dane_gun,
-            SUM(number_ammunition) AS number_ammunition, 
-            SUM(number_caterages) AS number_caterages, 
-            SUM(number_vehicle) AS number_vehicle,
-            SUM(police_casualties) AS police_casualties, 
-            SUM(operative_casualties) AS operative_casualties, 
-            SUM(number_others) AS number_others"))
-        ->whereBetween('incident_date', [$date_from, $date_to])
-        // ->where('sitrep_id','=',$sitrep_id)
-        ->groupBy('crime_type')
-        // ->orderBy('crime_type')
-        ->get();
+         // THIS DISPLAYS THE NUMBER OF INCIDENTS CHARTS BY CRIME TYPE
+        $sitreps_crime_type = Sitrep::select(DB::raw(" crime_type,  
+                SUM(number_incident) AS number_incident, 
+                SUM(number_victims) AS number_victims, 
+                SUM(number_victims_injured) AS number_victims_injured,
+                SUM(number_casualties) AS number_casualties,
+                SUM(number_victims_rescused) AS number_victims_rescused, 
+                SUM(number_arrest) AS number_arrest,
+                SUM(suspect_casualties) AS suspect_casualties, 
+                SUM(number_firearms) AS number_firearms, 
+                SUM(number_dane_gun) AS number_dane_gun,
+                SUM(number_ammunition) AS number_ammunition, 
+                SUM(number_caterages) AS number_caterages, 
+                SUM(number_vehicle) AS number_vehicle,
+                SUM(police_casualties) AS police_casualties, 
+                SUM(operative_casualties) AS operative_casualties, 
+                SUM(number_others) AS number_others"))
+            ->whereBetween('incident_date', [$date_from, $date_to])
+            // ->where('sitrep_id','=',$sitrep_id)
+            ->groupBy('crime_type')
+            // ->orderBy('crime_type')
+            ->get();
 
-        // THIS DISPLAYS THE NUMBER OF INCIDENTS CHARTS BY CRIME TYPE & STATE
-    $sitreps_crime_type_state = Sitrep::select(DB::raw(" state_id, 
-            SUM(number_incident) AS number_incident, 
-            SUM(number_victims) AS number_victims, 
-            SUM(number_victims_injured) AS number_victims_injured,
-            SUM(number_casualties) AS number_casualties,
-            SUM(number_victims_rescused) AS number_victims_rescused, 
-            SUM(number_arrest) AS number_arrest,
-            SUM(suspect_casualties) AS suspect_casualties, 
-            SUM(number_firearms) AS number_firearms, 
-            SUM(number_dane_gun) AS number_dane_gun,
-            SUM(number_ammunition) AS number_ammunition, 
-            SUM(number_caterages) AS number_caterages, 
-            SUM(number_vehicle) AS number_vehicle,
-            SUM(police_casualties) AS police_casualties, 
-            SUM(operative_casualties) AS operative_casualties, 
-            SUM(number_others) AS number_others"))
-        ->whereBetween('incident_date', [$date_from, $date_to])
-        // ->where('sitrep_id','=',$sitrep_id)
-        ->groupBy('state_id')
-        // ->groupBy('crime_type')
-        // ->orderBy('')
-        ->get();
+            // THIS DISPLAYS THE NUMBER OF INCIDENTS CHARTS BY CRIME TYPE & STATE
+        $sitreps_crime_type_state = Sitrep::select(DB::raw(" state_id, 
+                SUM(number_incident) AS number_incident, 
+                SUM(number_victims) AS number_victims, 
+                SUM(number_victims_injured) AS number_victims_injured,
+                SUM(number_casualties) AS number_casualties,
+                SUM(number_victims_rescused) AS number_victims_rescused, 
+                SUM(number_arrest) AS number_arrest,
+                SUM(suspect_casualties) AS suspect_casualties, 
+                SUM(number_firearms) AS number_firearms, 
+                SUM(number_dane_gun) AS number_dane_gun,
+                SUM(number_ammunition) AS number_ammunition, 
+                SUM(number_caterages) AS number_caterages, 
+                SUM(number_vehicle) AS number_vehicle,
+                SUM(police_casualties) AS police_casualties, 
+                SUM(operative_casualties) AS operative_casualties, 
+                SUM(number_others) AS number_others"))
+            ->whereBetween('incident_date', [$date_from, $date_to])
+            // ->where('sitrep_id','=',$sitrep_id)
+            ->groupBy('state_id')
+            // ->groupBy('crime_type')
+            // ->orderBy('')
+            ->get();
 
-    // THIS DISPLAYS MAJOR CRIME DISTRIBUTION BY CRIME TYPE
-    $crime_distribution = Sitrep::select(DB::raw(" 
-        crime_type,  
+        // THIS DISPLAYS THE TOTAL NUMBER OF INCIDENTS 
+        $sitreps_state_total = Sitrep::select(DB::raw(" 
         SUM(number_incident) AS number_incident, 
         SUM(number_victims) AS number_victims, 
         SUM(number_victims_injured) AS number_victims_injured,
@@ -1166,64 +1045,24 @@ class SitrepController extends Controller
         SUM(operative_casualties) AS operative_casualties, 
         SUM(number_others) AS number_others"))
         ->whereBetween('incident_date', [$date_from, $date_to])
-        ->whereIn('crime_type', [1, 2, 3, 4, 5, 6, 7, 8, 15, 17, 21]) // Major crimes only
-        ->groupBy('crime_type')
-        ->orderBy('crime_type')
+        // ->where('sitrep_id','=',$sitrep_id)
+        // ->groupBy('state_id')
+        // ->orderBy('crime_type')
         ->get();
+        
 
-    // THIS DISPLAYS THE TOTAL NUMBER OF INCIDENTS 
-    $sitreps_state_total = Sitrep::select(DB::raw(" 
-    SUM(number_incident) AS number_incident, 
-    SUM(number_victims) AS number_victims, 
-    SUM(number_victims_injured) AS number_victims_injured,
-    SUM(number_casualties) AS number_casualties,
-    SUM(number_victims_rescused) AS number_victims_rescused, 
-    SUM(number_arrest) AS number_arrest,
-    SUM(suspect_casualties) AS suspect_casualties, 
-    SUM(number_firearms) AS number_firearms, 
-    SUM(number_dane_gun) AS number_dane_gun,
-    SUM(number_ammunition) AS number_ammunition, 
-    SUM(number_caterages) AS number_caterages, 
-    SUM(number_vehicle) AS number_vehicle,
-    SUM(police_casualties) AS police_casualties, 
-    SUM(operative_casualties) AS operative_casualties, 
-    SUM(number_others) AS number_others"))
-    ->whereBetween('incident_date', [$date_from, $date_to])
-    // ->where('sitrep_id','=',$sitrep_id)
-    // ->groupBy('state_id')
-    // ->orderBy('crime_type')
-    ->get();
 
-    // Calculate totals for crime distribution table
-    $crime_distribution_total = Sitrep::select(DB::raw(" 
-        SUM(number_incident) AS number_incident, 
-        SUM(number_victims) AS number_victims, 
-        SUM(number_victims_injured) AS number_victims_injured,
-        SUM(number_casualties) AS number_casualties,
-        SUM(number_victims_rescused) AS number_victims_rescused, 
-        SUM(number_arrest) AS number_arrest,
-        SUM(suspect_casualties) AS suspect_casualties, 
-        SUM(number_firearms) AS number_firearms, 
-        SUM(number_dane_gun) AS number_dane_gun,
-        SUM(number_ammunition) AS number_ammunition, 
-        SUM(number_caterages) AS number_caterages, 
-        SUM(number_vehicle) AS number_vehicle,
-        SUM(police_casualties) AS police_casualties, 
-        SUM(operative_casualties) AS operative_casualties, 
-        SUM(number_others) AS number_others"))
-        ->whereBetween('incident_date', [$date_from, $date_to])
-        ->whereIn('crime_type', [1, 2, 3, 4, 5, 6, 7, 8, 15, 17, 21]) // Major crimes only
-        ->first();
 
-    $groupby_type = 'state_id';
-    $groupby_name = 'state_id';
-    $incident_date1=date_create($date_from);
-    $incident_date2=date_create($date_to);
-    $incident_date=$date_from; 
+        $groupby_type = 'state_id';
+        $groupby_name = 'state_id';
+        $incident_date1=date_create($date_from);
+        $incident_date2=date_create($date_to);
+        $incident_date=$date_from; 
 
-    $info = 'Date: '.date_format($incident_date1,"d/m/Y").' - '.date_format($incident_date2,"d/m/Y").'';
-    return view('sitrep.sitrep.daily_report', compact('sitreps','sitrep_details','info','sitreps_state_total','sitreps_total','sitreps_crime_type','sitreps_crime_type_state','incident_date','groupby_type','groupby_name','crime_distribution','crime_distribution_total'));
-} // End Method
+        $info = 'Date: '.date_format($incident_date1,"d/m/Y").' - '.date_format($incident_date2,"d/m/Y").'';
+        return view('sitrep.sitrep.daily_report', compact('sitreps','sitreps_state_group','sitrep_details','info','sitreps_state_total','sitreps_total','sitreps_crime_type','sitreps_crime_type_state','incident_date','groupby_type','groupby_name'));
+    } // End Mehtod 
+   
 
      public function ValidateReport( Request $request) 
     {
@@ -1248,7 +1087,7 @@ class SitrepController extends Controller
 
     
 
-    public function YearlyAnalysis(Request $request)
+    public function YearlyAnalysis(Request $request) //Yearlytrends
     {
         // dd($request->all());
         
@@ -1524,12 +1363,13 @@ class SitrepController extends Controller
         $incident_date=$date_from; 
 
         $info = 'Date: '.date_format($incident_date1,"Y").' - '.date_format($incident_date2,"Y").'';
+        $info2 = 'Date: '.date_format($incident_date1,"Y").' - '.date_format($incident_date2,"Y").'';
         return view('sitrep.sitrep.analysis_report', 
         compact(
             'sitreps','info','sitreps_state_total','sitreps_total',
             'sitreps_crime_type','incident_date','groupby_type','groupby_name',
             'sitreps2','sitreps_state_total2','sitreps_total2',
-            'sitreps_crime_type2','incident_date2'
+            'sitreps_crime_type2','incident_date2','info2'
         ));
     } // End Mehtod 
 
@@ -1824,6 +1664,59 @@ class SitrepController extends Controller
 
         // dd($sitreps->all());
         return view('sitrep.sitrep.analysis_report', compact('sitreps_state','sitreps_state2','info2','info','sitreps_state_total','sitreps_total','incident_date','groupby_type','groupby_name'));
+    } // End Mehtod
+
+    public function Yearlytrends(Request $request) 
+    {
+        $date_from = $request->date_from;
+        $incident_date = $date_from;
+        
+        // THIS CALCULATES THE TOTAL OF EACH INCIDENT on a monthly bases FOR LINE CHART
+        $sitreps_total = Sitrep::select(DB::raw(" 
+            MONTH(incident_date) as month,
+            SUM(CASE WHEN crime_type = 1 THEN `number_incident` ELSE 0 END) AS crime1
+            , SUM(CASE WHEN crime_type = 2 THEN `number_incident` ELSE 0 END) AS crime2
+            , SUM(CASE WHEN crime_type = 3 THEN `number_incident` ELSE 0 END) AS crime3
+            , SUM(CASE WHEN crime_type = 4 THEN `number_incident` ELSE 0 END) AS crime4
+            , SUM(CASE WHEN crime_type = 5 THEN `number_incident` ELSE 0 END) AS crime5
+            , SUM(CASE WHEN crime_type = 6 THEN `number_incident` ELSE 0 END) AS crime6
+            , SUM(CASE WHEN crime_type = 7 THEN `number_incident` ELSE 0 END) AS crime7
+            , SUM(CASE WHEN crime_type = 8 THEN `number_incident` ELSE 0 END) AS crime8
+            , SUM(CASE WHEN crime_type = 9 THEN `number_incident` ELSE 0 END) AS crime9
+            , SUM(CASE WHEN crime_type = 10 THEN `number_incident` ELSE 0 END) AS crime10
+            , SUM(CASE WHEN crime_type = 11 THEN `number_incident` ELSE 0 END) AS crime11
+            "))
+            ->whereYear('incident_date', $date_from)
+            ->groupBy(DB::raw('MONTH(incident_date)'))  // Group by month extracted from incident_date
+            ->orderBy('month')
+            ->get();
+
+
+        // THIS CALCULATES THE TOTAL OF EACH INCIDENT on a monthly bases FOR LINE CHART
+        $sitreps_total_bar = Sitrep::select(DB::raw(" 
+            SUM(CASE WHEN crime_type = 1 THEN `number_incident` ELSE 0 END) AS crime1
+            , SUM(CASE WHEN crime_type = 2 THEN `number_incident` ELSE 0 END) AS crime2
+            , SUM(CASE WHEN crime_type = 3 THEN `number_incident` ELSE 0 END) AS crime3
+            , SUM(CASE WHEN crime_type = 4 THEN `number_incident` ELSE 0 END) AS crime4
+            , SUM(CASE WHEN crime_type = 5 THEN `number_incident` ELSE 0 END) AS crime5
+            , SUM(CASE WHEN crime_type = 6 THEN `number_incident` ELSE 0 END) AS crime6
+            , SUM(CASE WHEN crime_type = 7 THEN `number_incident` ELSE 0 END) AS crime7
+            , SUM(CASE WHEN crime_type = 8 THEN `number_incident` ELSE 0 END) AS crime8
+            , SUM(CASE WHEN crime_type = 9 THEN `number_incident` ELSE 0 END) AS crime9
+            , SUM(CASE WHEN crime_type = 10 THEN `number_incident` ELSE 0 END) AS crime10
+            , SUM(CASE WHEN crime_type = 11 THEN `number_incident` ELSE 0 END) AS crime11
+            "))
+            ->whereYear('incident_date', $date_from)
+            // ->groupBy(DB::raw('MONTH(incident_date)'))  // Group by month extracted from incident_date
+            // ->orderBy('month')
+            ->get();
+
+        // dd($sitreps_total_bar->all());
+        $incident_date1=date_create($date_from);
+        $incident_date=$date_from; 
+        $info = ' '.date_format($incident_date1,"Y").' ';
+        return view('sitrep.sitrep.trend_report', 
+        compact('info','sitreps_total', 'incident_date', 'sitreps_total_bar'));
     } // End Mehtod
     
 }

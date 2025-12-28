@@ -37,7 +37,7 @@
 			max-height: 150px;
 		}
 	</style>
-	<title>SITREP - Admin</title>
+	<title>{{$info}}</title>
 </head>
 
 <body>
@@ -93,20 +93,20 @@
 		</div>
 
 			@if($sitreps_total->all() != null)
-				<h4 class="m-0">{{$info}}</h4>
+				<h4 class="text-uppercase fw-bold" style="color:rgba(5, 22, 117, 1)">{{$info}}</h4>
 			@endif
 
 			@if($sitreps_total->all() == null)
-				<h4 class="m-0">No Record for {{$info}}</h4>
+				<h4 class="text-uppercase fw-bold" style="color:rgba(5, 22, 117, 1)">No Record for {{$info}}</h4>
 			@endif
 
 			@foreach($sitreps_total as $sitrep_total) 
 					
 			@endforeach
 
-
+		<!--Main Page section-->
 		<div class="page-content">
-
+						<!--Banner row-->
 						<div class="row row-cols-1 row-cols-md-2 row-cols-xl-5">
 							<div class="col">
 								<div class="card radius-10 bg-gradient-deepblue">
@@ -202,29 +202,19 @@
 							</div>
 						</div><!--end row-->
 					
-						<div class="row">
-							<div class="col-12 col-lg-12 col-xl-12 d-flex">
-							<div class="card w-100">
-								<div class="card-body">
-									
-									<div class="d-flex align-items-center">
-										<div>
-											<h6 class="mb-0">Incident Freqency per State</h6>
-										</div>
-										<div class="font-22 ms-auto"><i class="bx bx-dots-horizontal-rounded"></i>
-										</div>
-									</div>
-									<div class="d-flex align-items-center ms-auto font-13 gap-2 my-3">
-										<span class="border px-1 rounded cursor-pointer"><i class="bx bxs-circle me-1" style="color: #14abef"></i>Number of Incidents Reported</span>
-										<!-- <span class="border px-1 rounded cursor-pointer"><i class="bx bxs-circle me-1" style="color: #ade2f9"></i>Old Visitor</span> -->
-									</div>
-								<div class="chart-container-1">
-									<canvas id="chart1"></canvas>
-								</div>
-								</div>
-							</div>
-							</div>
-						</div><!--End Row-->
+						
+
+						
+
+							<!--end row-->
+						<div class="row row-cols-1 row-cols-md-2 row-cols-xl-2">
+							
+						</div>
+						<!--end row-->
+
+
+
+
 
 
 						<div class="row">
@@ -235,7 +225,7 @@
 									<div class="d-flex align-items-center">
 										<div>
 
-											<h6 class="mb-0">Key Insight for  
+											<h5 class="text-uppercase fw-bold" style="color:rgba(5, 22, 117, 1)">Key Insight for  
 
 											@if($sitreps_total->all() != null)
 												{{$info}}
@@ -244,7 +234,7 @@
 											@if($sitreps_total->all() == null)
 												No Record for {{$info}}
 											@endif
-											</h6>
+											</h5>
 											@foreach($sitreps_state_total as $sitrep_insight) 
 											@endforeach  
 										</div>
@@ -403,7 +393,6 @@
 							</div>
 						</div><!--End Row-->
 
-							<!--end row-->
 						<div class="row row-cols-1 row-cols-md-2 row-cols-xl-2">
 							<div class="col">
 								<div class="card w-100">
@@ -411,7 +400,7 @@
 										
 										<div class="d-flex align-items-center">
 											<div>
-												<h6 class="mb-0">Major Incident Freqency  </h6>
+												<h5 class="text-uppercase fw-bold" style="color:rgba(5, 22, 117, 1)">Major Incident Freqency  </h5>
 											</div>
 											<div class="font-22 ms-auto"><i class="bx bx-dots-horizontal-rounded"></i>
 											</div>
@@ -428,7 +417,7 @@
 									
 									<div class="d-flex align-items-center">
 										<div>
-											<h6 class="mb-0">Major Arrests, Recoveries and Rescues Freqency  </h6>
+											<h5 class="text-uppercase fw-bold" style="color:rgba(5, 22, 117, 1)">Major Arrests, Recoveries and Rescues Freqency  </h5>
 										</div>
 										<div class="font-22 ms-auto"><i class="bx bx-dots-horizontal-rounded"></i>
 										</div>
@@ -442,256 +431,346 @@
 						</div>
 						<!--end row-->
 
+
+
+						<div class="card radius-10">
+							<div class="card-body">
+								<div class="d-flex align-items-center">
+									<div>
+										<h5 class="text-uppercase fw-bold" style="color:rgba(5, 22, 117, 1)">{{$info}} Summary</h5>
+									</div>
+									<div class="font-22 ms-auto"><i class="bx bx-dots-horizontal-rounded"></i>
+									</div>
+								</div>
+								<hr>
+								<div>
+									<table id="example2" class="table table-striped table-bordered" style="width:100%">
+
+										<thead>
+											<tr>
+												<th>S/N</th>
+												<th>State</th>
+												<th>Date of Incident</th>
+												<th>Incident</th>
+												<!-- <th>Police Actions</th> -->
+											</tr>
+										</thead>
+										<tbody>
+											
+											
+
+										@php $i=0;  @endphp								   
+
+											@foreach ($sitrep_details as $sitrep_detail)
+
+												<tr style="text-align: justify;">
+													<td>{{$i=$i+1}}</td> 
+													<td>{{$sitrep_detail->state_id}}</td>
+													<td>{{ \Carbon\Carbon::parse($sitrep_detail->incident_date)->format('d-m-Y') }}</td>
+													<!-- <td>{{$sitrep_detail->incident_date}}</td> -->
+													<td class="text-uppercase">{{$sitrep_detail->crime_description}}
+														{{$sitrep_detail->police_action}}
+													</td>
+													<!-- <td>{{$sitrep_detail->police_action}}</td> -->
+												</tr>
+											@endforeach
+
+
+											
+										</tbody>
+										<tfoot>
+											<tr>
+											<th>S/N</th>
+												<th>State</th>
+												<th>Date of Incident</th>
+												<th>Incident</th>
+												<!-- <th>Police Actions</th> -->
+											</tr>
+										</tfoot>
+									</table>
+								</div>
+							</div>
+						</div>
+
+
+
+						<!--FREQUENCY BY BARCHART Row-->
+						<div class="row">
+							<div class="col-12 col-lg-12 col-xl-12 d-flex">
+							<div class="card w-100">
+								<div class="card-body">
+									
+									<div class="d-flex align-items-center">
+										<div>
+											<h5 class="text-uppercase fw-bold" style="color:rgba(5, 22, 117, 1)">Incident Freqency per State</h5>
+										</div>
+										<div class="font-22 ms-auto"><i class="bx bx-dots-horizontal-rounded"></i>
+										</div>
+									</div>
+									<div class="d-flex align-items-center ms-auto font-13 gap-2 my-3">
+										<span class="border px-1 rounded cursor-pointer"><i class="bx bxs-circle me-1" style="color: #14abef"></i>Number of Incidents Reported</span>
+										<!-- <span class="border px-1 rounded cursor-pointer"><i class="bx bxs-circle me-1" style="color: #ade2f9"></i>Old Visitor</span> -->
+									</div>
+								<div class="chart-container-1">
+									<canvas id="chart1"></canvas>
+								</div>
+								</div>
+							</div>
+							</div>
+						</div><!--End Row-->
+
+
+							<!-- Major Arrests, Recoveries, Rescues and Casualties Table per State -->
+							<div class="card radius-10">
+									<div class="card-body">
+										<div class="d-flex align-items-center">
+											<div>
+												<h5 class="text-uppercase fw-bold" style="color:rgba(5, 22, 117, 1)"> Major Arrests, Recoveries, Rescues and Casualties Table per State  </h5>
+											</div>
+											<div class="font-22 ms-auto"><i class="bx bx-dots-horizontal-rounded"></i></div>
+										</div>
+										<hr>
+										<div>
+											<table id="example1" class="table table-striped table-bordered">
+												<thead class="text-dark">
+												<tr>
+													<th>S/N</th>
+													<th>State of Incident</th>
+													<th>Number of Incidents</th>
+													
+													<th style="background-color: lightyellow;">Suspects Arrested</th>
+													<th style="background-color: lightgreen;">Firearms Recovered</th>
+													<th style="background-color: lightgreen;">Dane Guns Recovered</th>
+													<th style="background-color: lightgreen;">Ammunitions Recovered</th>
+													<th style="background-color: lightgreen;">Cartridges Recovered</th>
+													<th style="background-color: lightgreen;">Vehicles Recovered</th>
+													<th style="background-color: lightblue;">Victims Rescued</th>
+													<!-- <th style="background-color: lightblue;">Victims Abducted</th>
+													<th style="background-color: lightblue;">Victims Injured</th>
+													<th style="background-color: pink;">Victims Killed</th>
+													<th style="background-color: pink;">Police KIA</th>
+													<th style="background-color: pink;">Other Personnel KIA</th> -->
+													<th style="background-color: lightyellow;">Suspects Neutralised</th>
+
+												</tr>
+												</thead>
+												<tbody>
+												@php
+													$i=0;
+												@endphp
+												@foreach($sitreps as $sitrep) 
+													<tr>                    
+													<td>{{$i=$i+1}}</td> 
+													
+													<td align="right">{{$sitrep->state_id}}</td>
+														
+														@if ($sitrep->number_incident == 0)
+														<td align="center"> - </td>
+														@else
+														<td align="center"> {{$sitrep->number_incident}} </td>
+														@endif
+
+														
+
+														@if ($sitrep->number_arrest == 0)
+														<td align="center"> - </td>
+														@else
+														<td align="center"> {{$sitrep->number_arrest}} </td> 
+														@endif
+
+														
+
+														@if ($sitrep->number_firearms == 0)
+														<td align="center"> - </td>
+														@else
+														<td align="center"> {{$sitrep->number_firearms}} </td>
+														@endif
+
+														@if ($sitrep->number_dane_gun == 0)
+														<td align="center"> - </td>
+														@else
+														<td align="center"> {{$sitrep->number_dane_gun}} </td>
+														@endif
+
+														@if ($sitrep->number_ammunition == 0)
+														<td align="center"> - </td>
+														@else
+														<td align="center"> {{$sitrep->number_ammunition}} </td>
+														@endif
+
+														@if ($sitrep->number_caterages == 0)
+														<td align="center"> - </td>
+														@else
+														<td align="center"> {{$sitrep->number_caterages}} </td>
+														@endif
+
+														@if ($sitrep->number_vehicle == 0)
+														<td align="center"> - </td>
+														@else
+														<td align="center"> {{$sitrep->number_vehicle}} </td>
+														@endif
+
+														@if ($sitrep->number_victims_rescused == 0)
+														<td align="center"> - </td>
+														@else
+														<td align="center"> {{$sitrep->number_victims_rescused}} </td> 
+														@endif
+
+														<!-- @if ($sitrep->number_victims == 0)
+														<td align="center"> - </td>
+														@else
+														<td align="center"> {{$sitrep->number_victims}} </td>
+														@endif
+
+														@if ($sitrep->number_victims_injured == 0)
+														<td align="center"> - </td>
+														@else
+														<td align="center"> {{$sitrep->number_victims_injured}} </td>
+														@endif
+
+														@if ($sitrep->number_casualties == 0)
+														<td align="center"> - </td>
+														@else
+														<td align="center"> {{$sitrep->number_casualties}} </td>
+														@endif
+														
+
+														@if ($sitrep->police_casualties == 0)
+														<td align="center"> - </td>
+														@else
+														<td align="center"> {{$sitrep->police_casualties}} </td>
+														@endif
+
+														@if ($sitrep->operative_casualties == 0)
+														<td align="center"> - </td>
+														@else
+														<td align="center"> {{$sitrep->operative_casualties}} </td>
+														@endif -->
+
+														@if ($sitrep->suspect_casualties == 0)
+														<td align="center"> - </td>
+														@else
+														<td align="center"> {{$sitrep->suspect_casualties}} </td>
+														@endif
+													</tr>  
+												@endforeach    
+												
+												@foreach($sitreps_state_total as $sitrep) 
+												<tfoot>
+													<tr class="fw-bold">                    
+													<td></td> 
+													
+													<td  align="center">TOTAL</td>
+
+														@if ($sitrep->number_incident == 0)
+														<td align="center"> 0 </td>
+														@else
+														<td align="center"> {{$sitrep->number_incident}} </td>
+														@endif
+
+														
+														@if ($sitrep->number_arrest == 0)
+														<td align="center"> 0 </td>
+														@else
+														<td align="center"> {{$sitrep->number_arrest}} </td> 
+														@endif
+
+														@if ($sitrep->number_firearms == 0)
+														<td align="center"> 0 </td>
+														@else
+														<td align="center"> {{$sitrep->number_firearms}} </td>
+														@endif
+
+														@if ($sitrep->number_dane_gun == 0)
+														<td align="center"> 0 </td>
+														@else
+														<td align="center"> {{$sitrep->number_dane_gun}} </td>
+														@endif
+
+														@if ($sitrep->number_ammunition == 0)
+														<td align="center"> 0 </td>
+														@else
+														<td align="center"> {{$sitrep->number_ammunition}} </td>
+														@endif
+
+														@if ($sitrep->number_caterages == 0)
+														<td align="center"> 0 </td>
+														@else
+														<td align="center"> {{$sitrep->number_caterages}} </td>
+														@endif
+
+														@if ($sitrep->number_vehicle == 0)
+														<td align="center"> 0 </td>
+														@else
+														<td align="center"> {{$sitrep->number_vehicle}} </td>
+														@endif
+
+														@if ($sitrep->number_victims_rescused == 0)
+														<td align="center"> 0 </td>
+														@else
+														<td align="center"> {{$sitrep->number_victims_rescused}} </td> 
+														@endif
+
+
+														<!-- @if ($sitrep->number_victims == 0)
+														<td align="center"> 0 </td>
+														@else
+														<td align="center"> {{$sitrep->number_victims}} </td>
+														@endif
+
+														@if ($sitrep->number_victims_injured == 0)
+														<td align="center"> 0 </td>
+														@else
+														<td align="center"> {{$sitrep->number_victims_injured}} </td>
+														@endif
+
+														@if ($sitrep->number_casualties == 0)
+														<td align="center"> 0 </td>
+														@else
+														<td align="center"> {{$sitrep->number_casualties}} </td>
+														@endif
+														
+
+														@if ($sitrep->police_casualties == 0)
+														<td align="center"> 0 </td>
+														@else
+														<td align="center"> {{$sitrep->police_casualties}} </td>
+														@endif
+
+														@if ($sitrep->operative_casualties == 0)
+														<td align="center"> 0 </td>
+														@else
+														<td align="center"> {{$sitrep->operative_casualties}} </td>
+														@endif -->
+
+														@if ($sitrep->suspect_casualties == 0)
+														<td align="center"> 0 </td>
+														@else
+														<td align="center"> {{$sitrep->suspect_casualties}} </td>
+														@endif
+
+
+													</tr>  
+												@endforeach 
+												</tfoot>
+											</table>       
+										</div>
+									</div>
+							</div>
+
+
+							<!-- Major Arrests, Recoveries, Rescues and Casualties Table per CRIME -->	
 							<div class="card radius-10">
 								<div class="card-body">
 									<div class="d-flex align-items-center">
 										<div>
-											<h5 class="mb-0"> Major Arrests, Recoveries, Rescues and Casualties Table per State  </h5>
+											<h5 class="text-uppercase fw-bold" style="color:rgba(5, 22, 117, 1)"> Major Arrests, Recoveries, Rescues and Casualties Table per Crime Type  </h5>
 										</div>
-										<div class="font-22 ms-auto"><i class="bx bx-dots-horizontal-rounded"></i>
-										</div>
+										<div class="font-22 ms-auto"><i class="bx bx-dots-horizontal-rounded"></i></div>
 									</div>
 									<hr>
 									<div>
-										<table id="example1" class="table table-striped table-bordered">
-											<thead class="text-dark">
-											<tr>
-												<th>S/N</th>
-												<th>State of Incident</th>
-												<th>Number of Incidents</th>
-												
-												<th style="background-color: lightyellow;">Suspects Arrested</th>
-												<th style="background-color: lightgreen;">Firearms Recovered</th>
-												<th style="background-color: lightgreen;">Dane Guns Recovered</th>
-												<th style="background-color: lightgreen;">Ammunitions Recovered</th>
-												<th style="background-color: lightgreen;">Cartridges Recovered</th>
-												<th style="background-color: lightgreen;">Vehicles Recovered</th>
-												<th style="background-color: lightblue;">Victims Rescued</th>
-												<th style="background-color: lightblue;">Victims Abducted</th>
-												<th style="background-color: lightblue;">Victims Injured</th>
-												<th style="background-color: pink;">Victims Killed</th>
-												<th style="background-color: pink;">Police KIA</th>
-												<th style="background-color: pink;">Other Personnel KIA</th>
-												<th style="background-color: lightyellow;">Suspects Neutralised</th>
-
-											</tr>
-											</thead>
-											<tbody>
-											@php
-												$i=0;
-											@endphp
-											@foreach($sitreps as $sitrep) 
-												<tr>                    
-												<td>{{$i=$i+1}}</td> 
-												
-												<td align="right">{{$sitrep->state_id}}</td>
-													
-													@if ($sitrep->number_incident == 0)
-													<td align="center"> - </td>
-													@else
-													<td align="center"> {{$sitrep->number_incident}} </td>
-													@endif
-
-													
-
-													@if ($sitrep->number_arrest == 0)
-													<td align="center"> - </td>
-													@else
-													<td align="center"> {{$sitrep->number_arrest}} </td> 
-													@endif
-
-													
-
-													@if ($sitrep->number_firearms == 0)
-													<td align="center"> - </td>
-													@else
-													<td align="center"> {{$sitrep->number_firearms}} </td>
-													@endif
-
-													@if ($sitrep->number_dane_gun == 0)
-													<td align="center"> - </td>
-													@else
-													<td align="center"> {{$sitrep->number_dane_gun}} </td>
-													@endif
-
-													@if ($sitrep->number_ammunition == 0)
-													<td align="center"> - </td>
-													@else
-													<td align="center"> {{$sitrep->number_ammunition}} </td>
-													@endif
-
-													@if ($sitrep->number_caterages == 0)
-													<td align="center"> - </td>
-													@else
-													<td align="center"> {{$sitrep->number_caterages}} </td>
-													@endif
-
-													@if ($sitrep->number_vehicle == 0)
-													<td align="center"> - </td>
-													@else
-													<td align="center"> {{$sitrep->number_vehicle}} </td>
-													@endif
-
-													@if ($sitrep->number_victims_rescused == 0)
-													<td align="center"> - </td>
-													@else
-													<td align="center"> {{$sitrep->number_victims_rescused}} </td> 
-													@endif
-
-													@if ($sitrep->number_victims == 0)
-													<td align="center"> - </td>
-													@else
-													<td align="center"> {{$sitrep->number_victims}} </td>
-													@endif
-
-													@if ($sitrep->number_victims_injured == 0)
-													<td align="center"> - </td>
-													@else
-													<td align="center"> {{$sitrep->number_victims_injured}} </td>
-													@endif
-
-													@if ($sitrep->number_casualties == 0)
-													<td align="center"> - </td>
-													@else
-													<td align="center"> {{$sitrep->number_casualties}} </td>
-													@endif
-													
-
-													@if ($sitrep->police_casualties == 0)
-													<td align="center"> - </td>
-													@else
-													<td align="center"> {{$sitrep->police_casualties}} </td>
-													@endif
-
-													@if ($sitrep->operative_casualties == 0)
-													<td align="center"> - </td>
-													@else
-													<td align="center"> {{$sitrep->operative_casualties}} </td>
-													@endif
-
-													@if ($sitrep->suspect_casualties == 0)
-													<td align="center"> - </td>
-													@else
-													<td align="center"> {{$sitrep->suspect_casualties}} </td>
-													@endif
-												</tr>  
-											@endforeach    
-											
-											@foreach($sitreps_state_total as $sitrep) 
-											<tfoot>
-												<tr class="fw-bold">                    
-												<td></td> 
-												
-												<td  align="center">TOTAL</td>
-
-													@if ($sitrep->number_incident == 0)
-													<td align="center"> 0 </td>
-													@else
-													<td align="center"> {{$sitrep->number_incident}} </td>
-													@endif
-
-													
-													@if ($sitrep->number_arrest == 0)
-													<td align="center"> 0 </td>
-													@else
-													<td align="center"> {{$sitrep->number_arrest}} </td> 
-													@endif
-
-													@if ($sitrep->number_firearms == 0)
-													<td align="center"> 0 </td>
-													@else
-													<td align="center"> {{$sitrep->number_firearms}} </td>
-													@endif
-
-													@if ($sitrep->number_dane_gun == 0)
-													<td align="center"> 0 </td>
-													@else
-													<td align="center"> {{$sitrep->number_dane_gun}} </td>
-													@endif
-
-													@if ($sitrep->number_ammunition == 0)
-													<td align="center"> 0 </td>
-													@else
-													<td align="center"> {{$sitrep->number_ammunition}} </td>
-													@endif
-
-													@if ($sitrep->number_caterages == 0)
-													<td align="center"> 0 </td>
-													@else
-													<td align="center"> {{$sitrep->number_caterages}} </td>
-													@endif
-
-													@if ($sitrep->number_vehicle == 0)
-													<td align="center"> 0 </td>
-													@else
-													<td align="center"> {{$sitrep->number_vehicle}} </td>
-													@endif
-
-													@if ($sitrep->number_victims_rescused == 0)
-													<td align="center"> 0 </td>
-													@else
-													<td align="center"> {{$sitrep->number_victims_rescused}} </td> 
-													@endif
-
-
-													@if ($sitrep->number_victims == 0)
-													<td align="center"> 0 </td>
-													@else
-													<td align="center"> {{$sitrep->number_victims}} </td>
-													@endif
-
-													@if ($sitrep->number_victims_injured == 0)
-													<td align="center"> 0 </td>
-													@else
-													<td align="center"> {{$sitrep->number_victims_injured}} </td>
-													@endif
-
-													@if ($sitrep->number_casualties == 0)
-													<td align="center"> 0 </td>
-													@else
-													<td align="center"> {{$sitrep->number_casualties}} </td>
-													@endif
-													
-
-													@if ($sitrep->police_casualties == 0)
-													<td align="center"> 0 </td>
-													@else
-													<td align="center"> {{$sitrep->police_casualties}} </td>
-													@endif
-
-													@if ($sitrep->operative_casualties == 0)
-													<td align="center"> 0 </td>
-													@else
-													<td align="center"> {{$sitrep->operative_casualties}} </td>
-													@endif
-
-													@if ($sitrep->suspect_casualties == 0)
-													<td align="center"> 0 </td>
-													@else
-													<td align="center"> {{$sitrep->suspect_casualties}} </td>
-													@endif
-
-
-												</tr>  
-											@endforeach 
-											</tfoot>
-										</table>       
-									</div>
-								</div>
-							</div>
-
-							<!-- <div class="card radius-10">
-								<div class="card-body">
-									<div class="d-flex align-items-center">
-										<div>
-											<h5 class="mb-0"> Major Arrests, Recoveries, Rescues and Casualties Table per Crime Type  </h5>
-										</div>
-										<div class="font-22 ms-auto"><i class="bx bx-dots-horizontal-rounded"></i>
-										</div>
-									</div>
-									<hr>
-									<div>
-										<table id="example1" class="table table-striped table-bordered" style="width:100%">
+										<table id="example3" class="table table-striped table-bordered" style="width:100%">
 
 											<thead class="text-dark">
 											<tr>
@@ -704,12 +783,12 @@
 												<th style="background-color: lightblue;">Victims Rescued</th>
 												<th style="background-color: lightyellow;">Suspects Arrested</th>
 												<th style="background-color: lightyellow;">Suspects Neutralised</th>
-												<th style="background-color: lightgreen;">Firearms Recovered</th>
+												<!-- <th style="background-color: lightgreen;">Firearms Recovered</th>
 												<th style="background-color: lightgreen;">Dane Guns Recovered</th>
 												<th style="background-color: lightgreen;">Ammunitions Recovered</th>
 												<th style="background-color: lightgreen;">Cartridges Recovered</th>
 												<th style="background-color: lightgreen;">Vehicles Recovered</th>
-												<th style="background-color: lightgreen;">Other Items Recovered</th>
+												<th style="background-color: lightgreen;">Other Items Recovered</th> -->
 												<th style="background-color: pink;">Police KIA</th>
 												<th style="background-color: pink;">Other Personnel KIA</th>
 											</tr>
@@ -767,7 +846,7 @@
 													<td align="center"> {{$sitrep->suspect_casualties}} </td>
 													@endif
 
-													@if ($sitrep->number_firearms == 0)
+													<!-- @if ($sitrep->number_firearms == 0)
 													<td align="center"> - </td>
 													@else
 													<td align="center"> {{$sitrep->number_firearms}} </td>
@@ -801,7 +880,7 @@
 													<td align="center"> - </td>
 													@else
 													<td align="center"> {{$sitrep->number_others}} </td>
-													@endif
+													@endif -->
 
 													@if ($sitrep->police_casualties == 0)
 													<td align="center"> - </td>
@@ -867,7 +946,7 @@
 													<td align="center"> {{$sitrep->suspect_casualties}} </td>
 													@endif
 
-													@if ($sitrep->number_firearms == 0)
+													<!-- @if ($sitrep->number_firearms == 0)
 													<td align="center"> 0 </td>
 													@else
 													<td align="center"> {{$sitrep->number_firearms}} </td>
@@ -901,7 +980,7 @@
 													<td align="center"> 0 </td>
 													@else
 													<td align="center"> {{$sitrep->number_others}} </td>
-													@endif
+													@endif -->
 
 													@if ($sitrep->police_casualties == 0)
 													<td align="center"> 0 </td>
@@ -920,312 +999,47 @@
 											@endforeach 
 											</tfoot>
 										</table>       
-									</div>
-								</div>
-							</div> -->
-
-
-							<!-- <div class="card radius-10">
-								<div class="card-body">
-									<div class="d-flex align-items-center">
-										<div>
-											<h5 class="mb-0"> Major Arrests, Recoveries, Rescues and Casualties Table per Crime Type by State  </h5>
-										</div>
-										<div class="font-22 ms-auto"><i class="bx bx-dots-horizontal-rounded"></i>
-										</div>
-									</div>
-									<hr>
-									<div>
-										<table id="example3" class="table table-striped table-bordered" style="width:100%">
-
-											<thead class="text-dark">
-											<tr>
-												<th>S/N</th>
-												<th>Crime Type</th>
-												<th>State</th>
-												<th>Number of Incidents</th>
-												<th style="background-color: lightblue;">Victims Abducted</th>
-												<th style="background-color: lightblue;">Victims Injured</th>
-												<th style="background-color: pink;">Victims Killed</th>
-												<th style="background-color: lightblue;">Victims Rescued</th>
-												<th style="background-color: lightyellow;">Suspects Arrested</th>
-												<th style="background-color: lightyellow;">Suspects Neutralised</th>
-												<th style="background-color: lightgreen;">Firearms Recovered</th>
-												<th style="background-color: lightgreen;">Dane Guns Recovered</th>
-												<th style="background-color: lightgreen;">Ammunitions Recovered</th>
-												<th style="background-color: lightgreen;">Cartridges Recovered</th>
-												<th style="background-color: lightgreen;">Vehicles Recovered</th>
-												<th style="background-color: lightgreen;">Other Items Recovered</th>
-												<th style="background-color: pink;">Police KIA</th>
-												<th style="background-color: pink;">Other Personnel KIA</th>
-											</tr>
-											</thead>
-											<tbody>
-											@php
-												$i=0;
-											@endphp
-											@foreach($sitreps_crime_type_state as $sitrep) 
-												<tr>                    
-												<td>{{$i=$i+1}}</td> 
-												
-												<td align="right">{{ $sitrep['crime_type_details']['crime_type']}} </td>
-												<td align="right">{{$sitrep->state_id}}</td>
-
-													@if ($sitrep->number_incident == 0)
-													<td align="center"> - </td>
-													@else
-													<td align="center"> {{$sitrep->number_incident}} </td>
-													@endif
-
-													@if ($sitrep->number_victims == 0)
-													<td align="center"> - </td>
-													@else
-													<td align="center"> {{$sitrep->number_victims}} </td>
-													@endif
-
-													@if ($sitrep->number_victims_injured == 0)
-													<td align="center"> - </td>
-													@else
-													<td align="center"> {{$sitrep->number_victims_injured}} </td>
-													@endif
-
-													@if ($sitrep->number_casualties == 0)
-													<td align="center"> - </td>
-													@else
-													<td align="center"> {{$sitrep->number_casualties}} </td>
-													@endif
-
-													@if ($sitrep->number_victims_rescused == 0)
-													<td align="center"> - </td>
-													@else
-													<td align="center"> {{$sitrep->number_victims_rescused}} </td> 
-													@endif
-
-													@if ($sitrep->number_arrest == 0)
-													<td align="center"> - </td>
-													@else
-													<td align="center"> {{$sitrep->number_arrest}} </td> 
-													@endif
-
-													@if ($sitrep->suspect_casualties == 0)
-													<td align="center"> - </td>
-													@else
-													<td align="center"> {{$sitrep->suspect_casualties}} </td>
-													@endif
-
-													@if ($sitrep->number_firearms == 0)
-													<td align="center"> - </td>
-													@else
-													<td align="center"> {{$sitrep->number_firearms}} </td>
-													@endif
-
-													@if ($sitrep->number_dane_gun == 0)
-													<td align="center"> - </td>
-													@else
-													<td align="center"> {{$sitrep->number_dane_gun}} </td>
-													@endif
-
-													@if ($sitrep->number_ammunition == 0)
-													<td align="center"> - </td>
-													@else
-													<td align="center"> {{$sitrep->number_ammunition}} </td>
-													@endif
-
-													@if ($sitrep->number_caterages == 0)
-													<td align="center"> - </td>
-													@else
-													<td align="center"> {{$sitrep->number_caterages}} </td>
-													@endif
-
-													@if ($sitrep->number_vehicle == 0)
-													<td align="center"> - </td>
-													@else
-													<td align="center"> {{$sitrep->number_vehicle}} </td>
-													@endif
-
-													@if ($sitrep->number_others == 0)
-													<td align="center"> - </td>
-													@else
-													<td align="center"> {{$sitrep->number_others}} </td>
-													@endif
-
-													@if ($sitrep->police_casualties == 0)
-													<td align="center"> - </td>
-													@else
-													<td align="center"> {{$sitrep->police_casualties}} </td>
-													@endif
-
-													@if ($sitrep->operative_casualties == 0)
-													<td align="center"> - </td>
-													@else
-													<td align="center"> {{$sitrep->operative_casualties}} </td>
-													@endif
-												</tr>  
-											@endforeach    
-											
-											@foreach($sitreps_state_total as $sitrep) 
-												<tr class="fw-bold">                    
-												<td></td> 
-												
-												<td  align="center">TOTAL</td>
-
-													@if ($sitrep->number_incident == 0)
-													<td align="center"> 0 </td>
-													@else
-													<td align="center"> {{$sitrep->number_incident}} </td>
-													@endif
-
-													@if ($sitrep->number_victims == 0)
-													<td align="center"> 0 </td>
-													@else
-													<td align="center"> {{$sitrep->number_victims}} </td>
-													@endif
-
-													@if ($sitrep->number_victims_injured == 0)
-													<td align="center"> 0 </td>
-													@else
-													<td align="center"> {{$sitrep->number_victims_injured}} </td>
-													@endif
-
-													@if ($sitrep->number_casualties == 0)
-													<td align="center"> 0 </td>
-													@else
-													<td align="center"> {{$sitrep->number_casualties}} </td>
-													@endif
-
-													@if ($sitrep->number_victims_rescused == 0)
-													<td align="center"> 0 </td>
-													@else
-													<td align="center"> {{$sitrep->number_victims_rescused}} </td> 
-													@endif
-
-													@if ($sitrep->number_arrest == 0)
-													<td align="center"> 0 </td>
-													@else
-													<td align="center"> {{$sitrep->number_arrest}} </td> 
-													@endif
-
-													@if ($sitrep->suspect_casualties == 0)
-													<td align="center"> 0 </td>
-													@else
-													<td align="center"> {{$sitrep->suspect_casualties}} </td>
-													@endif
-
-													@if ($sitrep->number_firearms == 0)
-													<td align="center"> 0 </td>
-													@else
-													<td align="center"> {{$sitrep->number_firearms}} </td>
-													@endif
-
-													@if ($sitrep->number_dane_gun == 0)
-													<td align="center"> 0 </td>
-													@else
-													<td align="center"> {{$sitrep->number_dane_gun}} </td>
-													@endif
-
-													@if ($sitrep->number_ammunition == 0)
-													<td align="center"> 0 </td>
-													@else
-													<td align="center"> {{$sitrep->number_ammunition}} </td>
-													@endif
-
-													@if ($sitrep->number_caterages == 0)
-													<td align="center"> 0 </td>
-													@else
-													<td align="center"> {{$sitrep->number_caterages}} </td>
-													@endif
-
-													@if ($sitrep->number_vehicle == 0)
-													<td align="center"> 0 </td>
-													@else
-													<td align="center"> {{$sitrep->number_vehicle}} </td>
-													@endif
-
-													@if ($sitrep->number_others == 0)
-													<td align="center"> 0 </td>
-													@else
-													<td align="center"> {{$sitrep->number_others}} </td>
-													@endif
-
-													@if ($sitrep->police_casualties == 0)
-													<td align="center"> 0 </td>
-													@else
-													<td align="center"> {{$sitrep->police_casualties}} </td>
-													@endif
-
-													@if ($sitrep->operative_casualties == 0)
-													<td align="center"> 0 </td>
-													@else
-													<td align="center"> {{$sitrep->operative_casualties}} </td>
-													@endif
-
-
-												</tr>  
-											@endforeach 
-											</tfoot>
-										</table>       
-									</div>
-								</div>
-							</div> -->
-
-							<div class="card radius-10">
-								<div class="card-body">
-									<div class="d-flex align-items-center">
-										<div>
-											<h5 class="mb-0">SITREP Summary</h5>
-										</div>
-										<div class="font-22 ms-auto"><i class="bx bx-dots-horizontal-rounded"></i>
-										</div>
-									</div>
-									<hr>
-									<div>
-										<table id="example2" class="table table-striped table-bordered" style="width:100%">
-
-											<thead>
-												<tr>
-													<th>S/N</th>
-													<th>State</th>
-													<th>Date of Incident</th>
-													<th>Incident</th>
-													<!-- <th>Police Actions</th> -->
-												</tr>
-											</thead>
-											<tbody>
-												
-												
-
-											@php $i=0;  @endphp								   
-
-												@foreach ($sitrep_details as $sitrep_detail)
-
-													<tr style="text-align: justify;">
-														<td>{{$i=$i+1}}</td> 
-														<td>{{$sitrep_detail->state_id}}</td>
-														<td>{{ \Carbon\Carbon::parse($sitrep_detail->incident_date)->format('d-m-Y') }}</td>
-														<!-- <td>{{$sitrep_detail->incident_date}}</td> -->
-														<td class="text-uppercase">{{$sitrep_detail->crime_description}}
-															{{$sitrep_detail->police_action}}
-														</td>
-														<!-- <td>{{$sitrep_detail->police_action}}</td> -->
-													</tr>
-												@endforeach
-
-
-												
-											</tbody>
-											<tfoot>
-												<tr>
-												<th>S/N</th>
-													<th>State</th>
-													<th>Date of Incident</th>
-													<th>Incident</th>
-													<!-- <th>Police Actions</th> -->
-												</tr>
-											</tfoot>
-										</table>
 									</div>
 								</div>
 							</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+					
+
+
+					
+
+
+
+					
+
+
+
+
+
+
+
+
+
+
+
+							
+						
+
+
+							
+							
 		</div>
 			
 
@@ -1302,6 +1116,18 @@
 			
 			table.buttons().container()
 				.appendTo( '#example2_wrapper .col-md-6:eq(0)' );
+		} );
+	</script>
+
+	<script>
+		$(document).ready(function() {
+			var table = $('#example3').DataTable( {
+				lengthChange: false,
+				buttons: [ 'copy', 'excel', 'pdf', 'print']
+			} );
+			
+			table.buttons().container()
+				.appendTo( '#example3_wrapper .col-md-6:eq(0)' );
 		} );
 	</script>
 
