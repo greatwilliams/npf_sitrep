@@ -33,6 +33,130 @@
     <title>SITREP - Crime Hotspot Map</title>
     
     <style>
+        /* Print Styles */
+        @media print {
+            .sidebar-wrapper,
+            .header,
+            .fullscreen-btn,
+            #toggleFullscreenBtn,
+            #fullscreenBtn,
+            #zoomInBtn,
+            #zoomOutBtn,
+            #resetViewBtn,
+            #resetFilters,
+            .btn-secondary,
+            .btn-group,
+            .alert-info,
+            .how-to-use-card,
+            .legend {
+                display: none !important;
+            }
+            
+            .page-wrapper {
+                margin-left: 0 !important;
+                padding: 0 !important;
+            }
+            
+            .card {
+                border: 1px solid #dee2e6 !important;
+                box-shadow: none !important;
+                margin-bottom: 10px !important;
+            }
+            
+            .card-body {
+                padding: 15px !important;
+            }
+            
+            #map {
+                height: 500px !important;
+                border: 1px solid #dee2e6 !important;
+                box-shadow: none !important;
+            }
+            
+            .table {
+                font-size: 12px !important;
+            }
+            
+            h1, h2, h3, h4, h5, h6 {
+                color: #000 !important;
+            }
+            
+            body {
+                background: white !important;
+                color: black !important;
+            }
+            
+            .no-print {
+                display: none !important;
+            }
+            
+            .print-only {
+                display: block !important;
+            }
+            
+            /* Ensure map is visible in print */
+            .leaflet-container {
+                overflow: visible !important;
+            }
+        }
+        
+        @media screen {
+            .print-only {
+                display: none !important;
+            }
+        }
+        
+        /* Sidebar toggle styles */
+        .sidebar-toggle-btn {
+            position: fixed;
+            left: 10px;
+            top: 70px;
+            z-index: 1000;
+            background: #0d6efd;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            transition: all 0.3s ease;
+        }
+        
+        .sidebar-toggle-btn:hover {
+            background: #0b5ed7;
+            transform: scale(1.1);
+        }
+        
+        .sidebar-toggle-btn i {
+            font-size: 20px;
+        }
+        
+        .sidebar-collapsed .sidebar-wrapper {
+            margin-left: -250px;
+        }
+        
+        .sidebar-collapsed .page-wrapper {
+            margin-left: 0;
+        }
+        
+        .sidebar-collapsed .sidebar-toggle-btn {
+            left: 20px;
+        }
+        
+        .sidebar-collapsed .sidebar-toggle-btn i {
+            transform: rotate(180deg);
+        }
+        
+        /* Smooth transitions */
+        .sidebar-wrapper,
+        .page-wrapper {
+            transition: all 0.3s ease;
+        }
+        
         #map {
             height: 600px;
             width: 100%;
@@ -87,18 +211,18 @@
         }
         
         /* Updated Intensity Colors - More Distinct and Visible */
-        .intensity-0 { background-color: #ffffff !important; border: 1px solid #dee2e6 !important; color: #333 !important; }
-        .intensity-1 { background-color: #a8e6cf !important; color: #333 !important; } /* Very Light Green */
-        .intensity-2 { background-color: #4caf50 !important; color: white !important; } /* Medium Green */
-        .intensity-3 { background-color: #2196f3 !important; color: white !important; } /* Bright Blue */
-        .intensity-4 { background-color: #e91e63 !important; color: white !important; } /* Dark Pink/Magenta */
-        .intensity-5 { background-color: #f44336 !important; color: white !important; } /* Bright Red */
+        .intensity-0 { background-color: #a3c8f3ff !important; border: 1px solid #dee2e6 !important; color: #333 !important; }
+        .intensity-1 { background-color: #a3c8f3ff !important; color: #333 !important; } /* White for low incidents */
+        .intensity-2 { background-color: #2196f3 !important; color: white !important; } /* Blue for medium */
+        .intensity-3 { background-color: #dbe914 !important; color: black !important; } /* Yellow for high */
+        .intensity-4 { background-color: #e91e63 !important; color: white !important; } /* Pink for very high */
+        .intensity-5 { background-color: #f44336 !important; color: white !important; } /* Red for critical */
         
         /* Table row colors matching map */
-        .table-intensity-0 { background-color: #ffffff; color: #333; border: 1px solid #dee2e6; }
-        .table-intensity-1 { background-color: #a8e6cf; color: #333; }
-        .table-intensity-2 { background-color: #4caf50; color: white; }
-        .table-intensity-3 { background-color: #2196f3; color: white; }
+        .table-intensity-0 { background-color: #a3c8f3ff; color: #333; border: 1px solid #dee2e6; }
+        .table-intensity-1 { background-color: #a3c8f3ff; color: #333; }
+        .table-intensity-2 { background-color: #2196f3; color: white; }
+        .table-intensity-3 { background-color: #dbe914; color: black; }
         .table-intensity-4 { background-color: #e91e63; color: white; }
         .table-intensity-5 { background-color: #f44336; color: white; }
         
@@ -211,7 +335,7 @@
         .crime-circle:hover {
             opacity: 1;
             transform: scale(1.2);
-            border: 3px solid #ffffff;
+            border: 3px solid #a3c8f3ff;
             box-shadow: 0 6px 15px rgba(0, 0, 0, 0.4);
             z-index: 1000 !important;
         }
@@ -278,7 +402,7 @@
             height: 20px;
             border-radius: 10px;
             margin-top: 5px;
-            background: linear-gradient(to right, #a8e6cf, #4caf50, #2196f3, #e91e63, #f44336);
+            background: linear-gradient(to right, #a3c8f3ff, #2196f3, #dbe914, #e91e63, #f44336);
         }
         
         .crime-type-badge {
@@ -286,10 +410,48 @@
             padding: 4px 8px;
             border-radius: 4px;
         }
+        
+        /* Print header */
+        .print-header {
+            display: none;
+            text-align: center;
+            padding: 20px;
+            border-bottom: 2px solid #000;
+            margin-bottom: 20px;
+        }
+        
+        .print-header img {
+            height: 80px;
+            margin-bottom: 10px;
+        }
+        
+        .print-header h3 {
+            margin: 0;
+            color: #000;
+        }
+        
+        @media print {
+            .print-header {
+                display: block !important;
+            }
+        }
     </style>
 </head>
 
 <body>
+    <!-- Sidebar Toggle Button -->
+    <button class="sidebar-toggle-btn no-print" id="sidebarToggle">
+        <i class="bx bx-chevron-left"></i>
+    </button>
+    
+    <!-- Print Header (only visible when printing) -->
+    <div class="print-header">
+        <img src="{{ asset('sitrep/adminbackend/assets/images/logo/logo.png') }}" alt="Logo">
+        <h3><b>CRIME HOTSPOT ANALYSIS MAP</b></h3>
+        <h4>Crime Distribution Across Nigeria</h4>
+        <p>Generated on: {{ date('F d, Y') }}</p>
+    </div>
+    
     <!--wrapper-->
     <div class="wrapper">
         <!--sidebar wrapper -->
@@ -318,8 +480,8 @@
                                         <h5 class="text-muted">Visual representation of crime intensity by state</h5>
                                     </div>
                                     <div class="col-md-4 text-end">
-                                        <a href="javascript:history.back()" class="btn btn-secondary">Back</a>
-                                        <button onclick="window.print()" class="btn btn-primary">Print Report</button>
+                                        <a href="javascript:history.back()" class="btn btn-secondary no-print">Back</a>
+                                        <button onclick="printReport()" class="btn btn-primary">Print Report</button>
                                     </div>
                                 </div>
                             </div>
@@ -385,7 +547,7 @@
                                         </div>
                                     </div>
                                     
-                                    <div class="text-center">
+                                    <div class="text-center no-print">
                                         <button type="submit" class="btn btn-primary">
                                             <i class="bx bx-filter-alt"></i> Apply Filters
                                         </button>
@@ -425,12 +587,12 @@
 
                 <!-- Map Section -->
                 <div class="row mt-4">
-                    <div class="col-md-8">
+                    <div class="col-md-9">
                         <div class="card">
                             <div class="card-body">
                                 <div class="d-flex justify-content-between align-items-center mb-3">
                                     <h5 class="card-title mb-0">Crime Intensity Map</h5>
-                                    <div class="btn-group">
+                                    <div class="btn-group no-print">
                                         <button id="fullscreenBtn" class="btn btn-outline-primary btn-sm">
                                             <i class="bx bx-fullscreen"></i> Full Screen
                                         </button>
@@ -453,7 +615,7 @@
                                         </div>
                                         <span class="ms-2">Loading crime data...</span>
                                     </div>
-                                    <button id="toggleFullscreenBtn" class="fullscreen-btn" style="display: none;">
+                                    <button id="toggleFullscreenBtn" class="fullscreen-btn no-print" style="display: none;">
                                         <i class="bx bx-fullscreen"></i> Full Screen
                                     </button>
                                 </div>
@@ -463,24 +625,24 @@
                                         <div class="row">
                                             <div class="col-md-6">
                                                 <div class="legend-item">
-                                                    <div class="legend-color" style="background-color: #ffffff; border: 2px solid #adb5bd;"></div>
+                                                    <div class="legend-color" style="background-color: #a3c8f3ff; border: 2px solid #adb5bd;"></div>
                                                     <div class="legend-text">No Data / 0 incidents</div>
                                                     <div class="legend-count" id="legendCount0">0 states</div>
                                                 </div>
                                                 <div class="legend-item">
-                                                    <div class="legend-color" style="background-color: #a8e6cf;"></div>
+                                                    <div class="legend-color" style="background-color: #a3c8f3ff;"></div>
                                                     <div class="legend-text">Low (1-10 incidents)</div>
                                                     <div class="legend-count" id="legendCount1">0 states</div>
                                                 </div>
                                                 <div class="legend-item">
-                                                    <div class="legend-color" style="background-color: #4caf50;"></div>
+                                                    <div class="legend-color" style="background-color: #2196f3;"></div>
                                                     <div class="legend-text">Medium (11-50 incidents)</div>
                                                     <div class="legend-count" id="legendCount2">0 states</div>
                                                 </div>
                                             </div>
                                             <div class="col-md-6">
                                                 <div class="legend-item">
-                                                    <div class="legend-color" style="background-color: #2196f3;"></div>
+                                                    <div class="legend-color" style="background-color: #dbe914;"></div>
                                                     <div class="legend-text">High (51-100 incidents)</div>
                                                     <div class="legend-count" id="legendCount3">0 states</div>
                                                 </div>
@@ -509,7 +671,7 @@
                         </div>
                     </div>
                     
-                    <div class="col-md-4">
+                    <div class="col-md-3">
                         <div class="card">
                             <div class="card-body">
                                 <h5 class="card-title">State Details</h5>
@@ -522,7 +684,7 @@
                             </div>
                         </div>
                         
-                        <div class="card mt-4">
+                        <div class="card mt-4 how-to-use-card no-print">
                             <div class="card-body">
                                 <h5 class="card-title">How to Use</h5>
                                 <ul class="list-unstyled">
@@ -599,12 +761,12 @@
         
         // Color definitions for intensity levels - More distinct
         const INTENSITY_COLORS = {
-            0: '#ffffff',      // White - No Data / 0 incidents
-            1: '#a8e6cf',      // Very Light Green - 1-10 incidents
-            2: '#4caf50',      // Medium Green - 11-50 incidents
-            3: '#2196f3',      // Bright Blue - 51-100 incidents
-            4: '#e91e63',      // Dark Pink/Magenta - 101-200 incidents
-            5: '#f44336'       // Bright Red - 200+ incidents
+            0: '#a3c8f3ff',      // White - No Data / 0 incidents
+            1: '#a3c8f3ff',      // White for low incidents
+            2: '#2196f3',      // Blue for medium
+            3: '#dbe914',      // Yellow for high
+            4: '#e91e63',      // Pink for very high
+            5: '#f44336'       // Red for critical
         };
         
         // Intensity labels
@@ -658,6 +820,32 @@
             
             // Load initial data immediately
             loadHotspotData();
+        }
+        
+        // Custom print function
+        function printReport() {
+            // Trigger browser's print dialog
+            window.print();
+        }
+        
+        // Toggle sidebar
+        function toggleSidebar() {
+            document.body.classList.toggle('sidebar-collapsed');
+            var toggleBtn = document.getElementById('sidebarToggle');
+            var icon = toggleBtn.querySelector('i');
+            
+            if (document.body.classList.contains('sidebar-collapsed')) {
+                icon.className = 'bx bx-chevron-right';
+            } else {
+                icon.className = 'bx bx-chevron-left';
+            }
+            
+            // Resize map after sidebar toggle
+            setTimeout(function() {
+                if (map) {
+                    map.invalidateSize();
+                }
+            }, 300);
         }
         
         // Calculate intensity level based on incidents
@@ -773,7 +961,7 @@
                     var circle = L.circleMarker([state.latitude, state.longitude], {
                         radius: radius,
                         fillColor: color,
-                        color: '#ffffff', // White border
+                        color: '#a3c8f3ff', // White border
                         weight: 2, // Thicker border
                         opacity: 0.9,
                         fillOpacity: 0.8, // More opaque for better visibility
@@ -794,7 +982,7 @@
                         this.setStyle({
                             fillOpacity: 1.0,
                             weight: 3,
-                            color: '#ffffff'
+                            color: '#a3c8f3ff'
                         });
                         this.bringToFront();
                     });
@@ -803,7 +991,7 @@
                         this.setStyle({
                             fillOpacity: 0.8,
                             weight: 2,
-                            color: '#ffffff'
+                            color: '#a3c8f3ff'
                         });
                     });
                     
@@ -1071,7 +1259,7 @@
                 html += `
                     <div class="col-md">
                         <div class="card mb-3" style="border: 3px solid ${color};">
-                            <div class="card-body text-center"  color: ${textColor};">
+                            <div class="card-body text-center" style="color: ${textColor};">
                                 <h6 class="card-title">
                                     #${index + 1} ${hotspot.state_name}
                                 </h6>
@@ -1173,6 +1361,9 @@
             // Initialize map
             initializeMap();
             
+            // Initialize sidebar toggle
+            document.getElementById('sidebarToggle').addEventListener('click', toggleSidebar);
+            
             // Handle filter form submission
             $('#hotspotFilterForm').on('submit', function(e) {
                 e.preventDefault();
@@ -1208,6 +1399,15 @@
             document.addEventListener('visibilitychange', function() {
                 if (document.hidden && isFullscreen) {
                     toggleFullscreen();
+                }
+            });
+            
+            // Handle window resize for map
+            window.addEventListener('resize', function() {
+                if (map) {
+                    setTimeout(function() {
+                        map.invalidateSize();
+                    }, 100);
                 }
             });
         });
