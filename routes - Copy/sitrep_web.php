@@ -86,6 +86,13 @@ Route::middleware(['auth', 'role:admin'])->group(function(){
 
 
     // SITREP hotspots` 
+    Route::post('/yearly/hotspots', [SitrepController::class, 'Yearlyhotspots'])->name('yearly.hotspots');
+    // Route::post('/monthly/hotspots', [SitrepController::class, 'Monthlyhotspots'])->name('monthly.hotspots');
+    Route::post('/custom/hotspots', [SitrepController::class, 'Customhotspots'])->name('custom.hotspots');
+    // Route::post('/monthly/hotspots', [SitrepController::class, 'Monthlyhotspots'])->name('monthly.hotspots');
+    Route::post('/monthly/hotspots', [SitrepController::class, 'Monthlyhotspots'])->name('monthly.hotspots');
+
+
     Route::get('/crime-hotspot', [CrimeHotspotController::class, 'index'])->name('crime.hotspot');
     Route::post('/crime-hotspot/data', [CrimeHotspotController::class, 'getHotspotData'])->name('crime.hotspot.data');
     Route::get('/crime-hotspot/state-details/{stateName}', [CrimeHotspotController::class, 'getStateDetails'])->name('crime.hotspot.state.details');

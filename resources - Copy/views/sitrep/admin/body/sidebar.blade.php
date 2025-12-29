@@ -29,15 +29,15 @@
 					</a>
 				</li>
 				@php  } @endphp
-				@php  if (Auth::user()->state != "FHQ") { @endphp 
+
 				<li>
 					<a href="{{route('state.add.sitrep')}}">
 						<div class="parent-icon"><i class="bx bx-cookie"></i>
 						</div>
-						<div class="menu-title">Add Sitrep</div>
+						<div class="menu-title">Add Sitrep2</div>
 					</a>
 				</li>
-				@php  } @endphp
+
 
 				<li>
 					<a href="javascript:;" class="has-arrow">
@@ -54,7 +54,7 @@
 						<li><a data-bs-toggle="modal" data-bs-target="#exampleModal7"><i class="bx bx-right-arrow-alt"></i>Validate SITREP</a></li>					
 					</ul>
 				</li>
-				<!-- <li>
+				<li>
 					<a href="javascript:;" class="has-arrow">
 						<div class="parent-icon"><i class="bx bx-category"></i>
 						</div>
@@ -65,7 +65,7 @@
 						<li><a data-bs-toggle="modal" data-bs-target="#exampleModal5"><i class="bx bx-right-arrow-alt"></i>Month-on-Month Analysis</a></li>
 						<li><a data-bs-toggle="modal" data-bs-target="#exampleModal6"><i class="bx bx-right-arrow-alt"></i>Custom Analysis</a></li>
 					</ul>
-				</li> -->
+				</li>
 
 				<li>
 					<a href="javascript:;" class="has-arrow">
@@ -74,22 +74,21 @@
 						<div class="menu-title">Crime Trends</div>
 					</a>
 					<ul>
-								<button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#exampleModal9">
-									<i class="bx bx-line-chart"></i> Generate Yearly Trend
-								</button>
-								<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#monthlyTrendModal">
-									<i class="bx bx-line-chart"></i> Generate Custom Trend
-								</button>
+						<li><a data-bs-toggle="modal" data-bs-target="#exampleModal9"><i class="bx bx-right-arrow-alt"></i>Yearly Trends </a></li>
+						<li><a data-bs-toggle="modal" data-bs-target="#exampleModal2"><i class="bx bx-right-arrow-alt"></i>Custom Trends</a></li>
+
+
+
+						<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#monthlyTrendModal">
+							<i class="bx bx-line-chart"></i> Generate Monthly Trend
+						</button>
+
+
+
+
+				@php  } @endphp
 					</ul>
 				</li>
-				<li>
-					<a href="{{route('crime.hotspot')}}">
-						<div class="parent-icon"><i class="bx bx-cookie"></i>
-						</div>
-						<div class="menu-title">Crime Hotspots</div>
-					</a>
-				</li>
-				@php  } @endphp
 
 				<!-- I SHALL USE THIS <li></li> ABOVE -->
 				@php  if (Auth::user()->email == "greatestwilliams@gmail.com") { @endphp 

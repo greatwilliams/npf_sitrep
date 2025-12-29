@@ -20,7 +20,6 @@
 					</a>
 				</li>
 
-				@php  if (Auth::user()->state == "FHQ") { @endphp 
 				<li>
 					<a href="{{route('admin.add.sitrep')}}">
 						<div class="parent-icon"><i class="bx bx-cookie"></i>
@@ -28,16 +27,7 @@
 						<div class="menu-title">Add Sitrep</div>
 					</a>
 				</li>
-				@php  } @endphp
-				@php  if (Auth::user()->state != "FHQ") { @endphp 
-				<li>
-					<a href="{{route('state.add.sitrep')}}">
-						<div class="parent-icon"><i class="bx bx-cookie"></i>
-						</div>
-						<div class="menu-title">Add Sitrep</div>
-					</a>
-				</li>
-				@php  } @endphp
+
 
 				<li>
 					<a href="javascript:;" class="has-arrow">
@@ -47,14 +37,11 @@
 					</a>
 					<ul>
 						<li><a data-bs-toggle="modal" data-bs-target="#exampleModal1"><i class="bx bx-right-arrow-alt"></i>Daily SITREP</a></li>
-						@php  if (Auth::user()->state == "FHQ") { @endphp 
-
-						<!-- <li><a data-bs-toggle="modal" data-bs-target="#exampleModal2"><i class="bx bx-right-arrow-alt"></i>Monthly SITREP</a></li> -->
+						<li><a data-bs-toggle="modal" data-bs-target="#exampleModal2"><i class="bx bx-right-arrow-alt"></i>Monthly SITREP</a></li>
 						<li><a data-bs-toggle="modal" data-bs-target="#exampleModal3"><i class="bx bx-right-arrow-alt"></i>Custom SITREP</a></li>					
-						<li><a data-bs-toggle="modal" data-bs-target="#exampleModal7"><i class="bx bx-right-arrow-alt"></i>Validate SITREP</a></li>					
 					</ul>
 				</li>
-				<!-- <li>
+				<li>
 					<a href="javascript:;" class="has-arrow">
 						<div class="parent-icon"><i class="bx bx-category"></i>
 						</div>
@@ -65,34 +52,9 @@
 						<li><a data-bs-toggle="modal" data-bs-target="#exampleModal5"><i class="bx bx-right-arrow-alt"></i>Month-on-Month Analysis</a></li>
 						<li><a data-bs-toggle="modal" data-bs-target="#exampleModal6"><i class="bx bx-right-arrow-alt"></i>Custom Analysis</a></li>
 					</ul>
-				</li> -->
-
-				<li>
-					<a href="javascript:;" class="has-arrow">
-						<div class="parent-icon"><i class="bx bx-category"></i>
-						</div>
-						<div class="menu-title">Crime Trends</div>
-					</a>
-					<ul>
-								<button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#exampleModal9">
-									<i class="bx bx-line-chart"></i> Generate Yearly Trend
-								</button>
-								<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#monthlyTrendModal">
-									<i class="bx bx-line-chart"></i> Generate Custom Trend
-								</button>
-					</ul>
 				</li>
-				<li>
-					<a href="{{route('crime.hotspot')}}">
-						<div class="parent-icon"><i class="bx bx-cookie"></i>
-						</div>
-						<div class="menu-title">Crime Hotspots</div>
-					</a>
-				</li>
-				@php  } @endphp
 
 				<!-- I SHALL USE THIS <li></li> ABOVE -->
-				@php  if (Auth::user()->email == "greatestwilliams@gmail.com") { @endphp 
 
 				 <li>
 					<a class="has-arrow" href="javascript:;">
@@ -101,19 +63,19 @@
 						<div class="menu-title">Manage Admin</div>
 					</a>
 					<ul>
+						@php  if (Auth::user()->email == "greatestwilliams@gmail.com") { @endphp 
 							<li> <a href="{{route('register.analyst')}}"><i class="bx bx-right-arrow-alt"></i>Register Analysts</a>
 							</li>
-						
+						@php  } @endphp
 							<li> <a href="{{route('active.analyst')}}"><i class="bx bx-right-arrow-alt"></i>Active Analysts</a>
 							</li>
 							<li> <a href="{{route('inactive.analyst')}}"><i class="bx bx-right-arrow-alt"></i>In-active Analysts</a>
 							</li>
 							<li> <a href="ecommerce-orders.html"><i class="bx bx-right-arrow-alt"></i>Orders</a>
 							</li>
-					</ul>
-				 </li>
-				@php  } @endphp
 
+					</ul>
+				</li>
        
 
 
