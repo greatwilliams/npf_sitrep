@@ -1,0 +1,209 @@
+/* Mobile sidebar toggle */
+@media (max-width: 768px) {
+    .sidebar-wrapper {
+        position: fixed;
+        left: -280px;
+        top: 0;
+        height: 100vh;
+        z-index: 1050;
+        transition: left 0.3s ease;
+        width: 280px !important;
+    }
+    
+    .sidebar-wrapper.mobile-open {
+        left: 0;
+        box-shadow: 5px 0 15px rgba(0,0,0,0.1);
+    }
+    
+    .page-wrapper.sidebar-mobile-open::before {
+        content: '';
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0,0,0,0.5);
+        z-index: 1049;
+    }
+    
+    /* Mobile hamburger menu */
+    .mobile-toggle-menu {
+        cursor: pointer;
+        z-index: 1051;
+    }
+    
+    /* Hide regular headers on mobile */
+    .mobile-hide {
+        display: none !important;
+    }
+    
+    /* Show vertical headers on mobile */
+    .mobile-vertical-header {
+        writing-mode: vertical-rl;
+        transform: rotate(180deg);
+        white-space: nowrap;
+        height: 150px;
+        min-width: 40px;
+        text-align: center;
+        vertical-align: middle;
+        padding: 10px 5px !important;
+        font-size: 12px !important;
+    }
+    
+    /* Show mobile headers */
+    .mobile-show {
+        display: table-row !important;
+    }
+    
+    /* Compact table for mobile */
+    .compact-table {
+        font-size: 12px !important;
+    }
+    
+    .compact-table td, 
+    .compact-table th {
+        padding: 6px 8px !important;
+    }
+    
+    /* Make DataTables responsive */
+    .dataTables_wrapper .dataTables_length,
+    .dataTables_wrapper .dataTables_filter {
+        float: none !important;
+        text-align: left !important;
+        margin-bottom: 10px !important;
+    }
+    
+    .dataTables_wrapper .dataTables_filter input {
+        width: 100% !important;
+    }
+    
+    /* Adjust button sizes on mobile */
+    .btn {
+        padding: 0.375rem 0.5rem !important;
+        font-size: 0.875rem !important;
+    }
+    
+    /* Modal adjustments for mobile */
+    .modal-dialog {
+        margin: 0.5rem !important;
+    }
+}
+
+/* Desktop sidebar collapse */
+@media (min-width: 769px) {
+    .sidebar-wrapper {
+        transition: width 0.3s ease !important;
+    }
+    
+    .sidebar-wrapper.collapsed {
+        width: 80px !important;
+    }
+    
+    .sidebar-wrapper.collapsed .menu-title,
+    .sidebar-wrapper.collapsed .logo-text,
+    .sidebar-wrapper.collapsed .has-arrow::after {
+        display: none !important;
+        opacity: 0 !important;
+    }
+    
+    .sidebar-wrapper.collapsed .parent-icon {
+        margin: 0 auto !important;
+    }
+    
+    .sidebar-wrapper.collapsed .sidebar-header .toggle-icon i {
+        transform: rotate(180deg);
+    }
+    
+    .page-wrapper.sidebar-collapsed {
+        margin-left: 80px !important;
+    }
+    
+    /* Hide mobile headers on desktop */
+    .mobile-vertical-header {
+        display: none !important;
+    }
+    
+    .mobile-show {
+        display: none !important;
+    }
+}
+
+/* Table column widths */
+.sn-column {
+    width: 5% !important;
+    min-width: 40px;
+}
+
+.sitrep-column {
+    width: 95% !important;
+}
+
+/* Situation report styling */
+.sitrep-content {
+    line-height: 1.5;
+    font-size: 14px;
+}
+
+.sitrep-content p {
+    margin-bottom: 8px;
+}
+
+.sitrep-content strong {
+    color: #333;
+    font-weight: 600;
+}
+
+/* Card spacing */
+.card {
+    margin-bottom: 20px;
+}
+
+/* Print optimizations */
+@media print {
+    .sidebar-wrapper,
+    .topbar,
+    .modal,
+    .btn,
+    .dataTables_length,
+    .dataTables_filter,
+    .dataTables_info,
+    .dataTables_paginate,
+    .dt-buttons {
+        display: none !important;
+    }
+    
+    .page-wrapper {
+        margin-left: 0 !important;
+    }
+    
+    .card {
+        border: 1px solid #ddd !important;
+        box-shadow: none !important;
+    }
+}
+
+/* Fix for DataTables buttons on small screens */
+.dt-buttons {
+    margin-bottom: 10px;
+}
+
+.dt-buttons .btn {
+    margin: 2px;
+}
+
+/* Ensure proper scrolling on mobile */
+.dataTables_scrollBody {
+    -webkit-overflow-scrolling: touch;
+}
+
+/* Fix for chart containers on mobile */
+.chart-container-1 {
+    position: relative;
+    height: 300px;
+}
+
+@media (max-width: 768px) {
+    .chart-container-1 {
+        height: 250px;
+    }
+}

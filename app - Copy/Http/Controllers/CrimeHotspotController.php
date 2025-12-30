@@ -194,6 +194,9 @@ class CrimeHotspotController extends Controller
             ->orderBy('month')
             ->get();
 
+        // Get all crime types first
+        $allCrimeTypes = Crime_type::all()->keyBy('id');
+        
         // Get top crime types
         $topCrimes = Sitrep::select(
                 'crime_type',
@@ -204,7 +207,13 @@ class CrimeHotspotController extends Controller
             ->groupBy('crime_type')
             ->orderBy('total', 'DESC')
             ->limit(5)
-            ->get();
+            ->get()
+            ->map(function ($item) use ($allCrimeTypes) {
+                // Add crime type name
+                $crimeType = $allCrimeTypes->get($item->crime_type);
+                $item->crime_type_name = $crimeType ? $crimeType->crime_type : 'Unknown Crime Type ' . $item->crime_type;
+                return $item;
+            });
 
         return response()->json([
             'success' => true,

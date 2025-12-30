@@ -1076,10 +1076,7 @@
                         <span class="info-label">Total Incidents:</span>
                         <span class="info-value">${state.incidents.toLocaleString()}</span>
                     </div>
-                    <div class="info-row">
-                        <span class="info-label">Number of Reports:</span>
-                        <span class="info-value">${state.incident_count}</span>
-                    </div>
+                   
                     <div class="info-row">
                         <span class="info-label">Intensity Level:</span>
                         <span class="info-value">
@@ -1153,18 +1150,13 @@
             var html = `
                 <h5 class="text-primary">${data.state_name}</h5>
                 <div class="row mt-3">
-                    <div class="col-6">
+                    <div class="col-12">
                         <div class="text-center p-3 rounded" style="background-color: ${color}; color: ${textColor};">
                             <h6>Total Incidents</h6>
                             <h3>${data.total_incidents.toLocaleString()}</h3>
                         </div>
                     </div>
-                    <div class="col-6">
-                        <div class="text-center p-3 bg-light rounded">
-                            <h6>Number of Reports</h6>
-                            <h3 class="text-success">${data.incident_count.toLocaleString()}</h3>
-                        </div>
-                    </div>
+                    
                 </div>
                 <div class="mt-3">
                     <div class="alert ${intensity >= 4 ? 'alert-danger' : intensity >= 3 ? 'alert-warning' : intensity >= 2 ? 'alert-info' : 'alert-success'}">

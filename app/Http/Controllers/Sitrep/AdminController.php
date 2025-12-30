@@ -51,6 +51,51 @@ class AdminController extends Controller
             $incident_date = $date_from;
             $incident_date2 = $date_to;
         }
+
+             // THIS CALCULATES THE TOTAL OF EACH INCIDENT
+        $sitreps_state_group = Sitrep::select(DB::raw(" state_id,
+            SUM(CASE WHEN crime_type = 1 THEN `number_incident` ELSE 0 END) AS crime1
+            , SUM(CASE WHEN crime_type = 2 THEN `number_incident` ELSE 0 END) AS crime2
+            , SUM(CASE WHEN crime_type = 3 THEN `number_incident` ELSE 0 END) AS crime3
+            , SUM(CASE WHEN crime_type = 4 THEN `number_incident` ELSE 0 END) AS crime4
+            , SUM(CASE WHEN crime_type = 5 THEN `number_incident` ELSE 0 END) AS crime5
+            , SUM(CASE WHEN crime_type = 6 THEN `number_incident` ELSE 0 END) AS crime6
+            , SUM(CASE WHEN crime_type = 7 THEN `number_incident` ELSE 0 END) AS crime7
+            , SUM(CASE WHEN crime_type = 8 THEN `number_incident` ELSE 0 END) AS crime8
+            , SUM(CASE WHEN crime_type = 9 THEN `number_incident` ELSE 0 END) AS crime9
+            , SUM(CASE WHEN crime_type = 10 THEN `number_incident` ELSE 0 END) AS crime10
+            , SUM(CASE WHEN crime_type = 11 THEN `number_incident` ELSE 0 END) AS crime11
+            , SUM(CASE WHEN crime_type = 12 THEN `number_incident` ELSE 0 END) AS crime12
+            , SUM(CASE WHEN crime_type = 13 THEN `number_incident` ELSE 0 END) AS crime13
+            , SUM(CASE WHEN crime_type = 14 THEN `number_incident` ELSE 0 END) AS crime14
+            , SUM(CASE WHEN crime_type = 15 THEN `number_incident` ELSE 0 END) AS crime15
+            , SUM(CASE WHEN crime_type = 16 THEN `number_incident` ELSE 0 END) AS crime16
+            , SUM(CASE WHEN crime_type = 17 THEN `number_incident` ELSE 0 END) AS crime17
+            , SUM(CASE WHEN crime_type = 18 THEN `number_incident` ELSE 0 END) AS crime18
+            , SUM(CASE WHEN crime_type = 19 THEN `number_incident` ELSE 0 END) AS crime19
+            , SUM(CASE WHEN crime_type = 20 THEN `number_incident` ELSE 0 END) AS crime20
+            , SUM(`number_incident`) as total_fireamrs"))
+                ->where(function ($query) {
+                    $query
+                    ->where('crime_type','=',1)
+                    ->orwhere('crime_type','=',2)
+                    ->orwhere('crime_type','=',3)
+                    ->orwhere('crime_type','=',4)
+                    ->orwhere('crime_type','=',5)
+                    ->orwhere('crime_type','=',6)
+                    ->orwhere('crime_type','=',7)
+                    ->orwhere('crime_type','=',8)
+                    ->orwhere('crime_type','=',15)
+                    ->orwhere('crime_type','=',17)
+                    ->orwhere('crime_type','=',21);
+                })
+            ->whereBetween('incident_date', [$date_from, $date_to])
+            ->groupBy('state_id')
+            ->orderBy('state_id')
+            ->get();
+        
+      
+        // dd($sitreps_state_group);
         // THIS CALCULATES THE TOTAL OF EACH INCIDENT
         $sitreps_total = Sitrep::select(DB::raw(" 
             SUM(CASE WHEN crime_type = 1 THEN `number_incident` ELSE 0 END) AS crime1
@@ -203,7 +248,7 @@ class AdminController extends Controller
             { $info = 'Sitreps in the Last 24 Hours';  }
         else{ $info = 'Sitrep from '.date_format($incident_date1,"jS F, Y").' to '.date_format($incident_date2,"jS F, Y").'';  }
 
-        return view('sitrep.admin.index', compact('sitreps','sitrep_details','info','sitreps_state_total','sitreps_total','sitreps_crime_type','sitreps_crime_type_state','incident_date','groupby_type','groupby_name'));
+        return view('sitrep.admin.index', compact('sitreps_state_group','sitreps','sitrep_details','info','sitreps_state_total','sitreps_total','sitreps_crime_type','sitreps_crime_type_state','incident_date','groupby_type','groupby_name'));
 
         // dd($sitreps->all());
        
