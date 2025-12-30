@@ -115,6 +115,121 @@
             color: #2c3e50;
             margin-bottom: 8px;
         }
+
+        /* Desktop sidebar collapse styles */
+        .wrapper.toggled .sidebar-wrapper {
+            width: 70px !important;
+            transition: width 0.3s ease;
+        }
+        
+        .wrapper.toggled .sidebar-wrapper .sidebar-header .logo-text,
+        .wrapper.toggled .sidebar-wrapper .menu-title,
+        .wrapper.toggled .sidebar-wrapper .has-arrow:after {
+            display: none !important;
+        }
+        
+        .wrapper.toggled .sidebar-wrapper .sidebar-header {
+            padding: 0 10px !important;
+            justify-content: center !important;
+        }
+        
+        .wrapper.toggled .sidebar-wrapper .sidebar-header > div {
+            display: none;
+        }
+        
+        .wrapper.toggled .sidebar-wrapper .sidebar-header .toggle-icon {
+            display: block !important;
+            margin: 0 !important;
+        }
+        
+        .wrapper.toggled .sidebar-wrapper .sidebar-header .logo-icon {
+            display: block !important;
+            margin: 0 auto;
+        }
+        
+        .wrapper.toggled .sidebar-wrapper .metismenu .menu-title {
+            display: none;
+        }
+        
+        .wrapper.toggled .sidebar-wrapper .metismenu .parent-icon {
+            margin-right: 0 !important;
+            margin-left: 0 !important;
+        }
+        
+        .wrapper.toggled .sidebar-wrapper .metismenu a {
+            justify-content: center !important;
+            padding: 10px !important;
+        }
+        
+        .wrapper.toggled .page-wrapper {
+            margin-left: 70px !important;
+            transition: margin-left 0.3s ease;
+        }
+        
+        /* Mobile sidebar styles */
+        @media (max-width: 768px) {
+            .sidebar-wrapper {
+                position: fixed;
+                top: 0;
+                left: -280px;
+                width: 280px;
+                height: 100vh;
+                z-index: 1050;
+                transition: left 0.3s ease;
+                box-shadow: 0 0 15px rgba(0,0,0,0.1);
+            }
+            
+            .sidebar-wrapper.open {
+                left: 0;
+            }
+            
+            .page-wrapper {
+                transition: margin-left 0.3s ease;
+            }
+            
+            .page-wrapper.sidebar-open {
+                margin-left: 280px;
+            }
+            
+            .overlay.toggle-icon {
+                display: none;
+            }
+            
+            .overlay.toggle-icon.show {
+                display: block;
+                position: fixed;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background: rgba(0,0,0,0.5);
+                z-index: 1049;
+            }
+            
+            .mobile-toggle-menu {
+                cursor: pointer;
+                font-size: 24px;
+                padding: 10px;
+                z-index: 1051;
+            }
+            
+            /* Hide desktop toggle arrow on mobile */
+            .sidebar-header .toggle-icon {
+                display: none !important;
+            }
+        }
+        
+        /* Desktop - show toggle arrow */
+        @media (min-width: 769px) {
+            .mobile-toggle-menu {
+                display: none !important;
+            }
+            
+            .sidebar-header .toggle-icon {
+                display: flex !important;
+                cursor: pointer;
+            }
+        }
     </style>
     
     <title>{{$info}}</title>
@@ -134,11 +249,16 @@
         <!--start page wrapper -->
         <div class="page-wrapper">
             <!-- Filter Record Button -->
-            <div class="col mb-3">
+            <div class="col mb-3 left">
                 <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
                     <i class="bx bx-filter"></i> Filter Record
+                </button> |
+                 <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#exampleModal1">
+                    <i class="bx bx-filter"></i> Generate Sitrep Report
                 </button>
             </div>
+
+          
             
             <!-- Filter Modal -->
             <div class="modal fade" id="exampleModal" tabindex="-1" aria-hidden="true">
@@ -500,7 +620,7 @@
                     <div class="card-body">
                         <div class="d-flex align-items-center">
                             <div>
-                                <h5 class="text-uppercase fw-bold" style="color:rgba(5, 22, 117, 1)">Major Arrests, Recoveries, Rescues and Casualties Table per State</h5>
+                                <h5 class="text-uppercase fw-bold" style="color:rgba(5, 22, 117, 1)">State-wise Statistics</h5>
                             </div>
                             <div class="font-22 ms-auto"><i class="bx bx-dots-horizontal-rounded"></i></div>
                         </div>
@@ -567,7 +687,7 @@
                     <div class="card-body">
                         <div class="d-flex align-items-center">
                             <div>
-                                <h5 class="text-uppercase fw-bold" style="color:rgba(5, 22, 117, 1)">STATE-BY-STATE BREAKDOWN OF SERIOUS CRIMES/ INCIDENTS</h5>
+                                <h5 class="text-uppercase fw-bold" style="color:rgba(5, 22, 117, 1)">Crime Type Statistics</h5>
                             </div>
                             <div class="font-22 ms-auto"><i class="bx bx-dots-horizontal-rounded"></i></div>
                         </div>
@@ -1200,6 +1320,7 @@
 	</script>
 	@endif
 
+
     <!-- Toastr notifications -->
     <script>
         @if(Session::has('message'))
@@ -1257,209 +1378,92 @@
         });
     </script>
 
-    <!--app JS-->
-    <script src="{{ asset('sitrep/adminbackend/assets/js/app.js')}}"></script>
-    <!-- Add this script for sidebar arrow toggle functionality -->
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    // Desktop sidebar toggle (sidebar arrow)
-    const sidebarToggleArrow = document.querySelector('.sidebar-header .toggle-icon');
-    const wrapper = document.querySelector('.wrapper');
-    
-    if (sidebarToggleArrow && wrapper) {
-        sidebarToggleArrow.addEventListener('click', function(e) {
-            e.preventDefault();
-            wrapper.classList.toggle('toggled');
-            
-            // Also update the arrow icon direction
-            const icon = this.querySelector('i');
-            if (icon) {
-                if (wrapper.classList.contains('toggled')) {
-                    icon.classList.remove('bx-arrow-to-left');
-                    icon.classList.add('bx-arrow-to-right');
-                } else {
-                    icon.classList.remove('bx-arrow-to-right');
-                    icon.classList.add('bx-arrow-to-left');
-                }
-            }
-            
-            // Store state in localStorage for persistence
-            localStorage.setItem('sidebarCollapsed', wrapper.classList.contains('toggled'));
-        });
+    <!-- Sidebar Toggle Script -->
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Desktop sidebar toggle (sidebar arrow)
+        const sidebarToggleArrow = document.querySelector('.sidebar-header .toggle-icon');
+        const wrapper = document.querySelector('.wrapper');
         
-        // Check localStorage for saved state
-        if (localStorage.getItem('sidebarCollapsed') === 'true') {
-            wrapper.classList.add('toggled');
-            const icon = sidebarToggleArrow.querySelector('i');
-            if (icon) {
-                icon.classList.remove('bx-arrow-to-left');
-                icon.classList.add('bx-arrow-to-right');
-            }
-        }
-    }
-    
-    // Mobile sidebar toggle (keep existing but ensure it works with desktop toggle)
-    const mobileToggleMenu = document.querySelector('.mobile-toggle-menu');
-    const sidebarWrapper = document.querySelector('.sidebar-wrapper');
-    const pageWrapper = document.querySelector('.page-wrapper');
-    const overlay = document.querySelector('.overlay.toggle-icon');
-    
-    if (mobileToggleMenu && sidebarWrapper) {
-        mobileToggleMenu.addEventListener('click', function(e) {
-            e.preventDefault();
-            sidebarWrapper.classList.toggle('open');
-            pageWrapper.classList.toggle('sidebar-open');
-            
-            // Toggle overlay
-            if (overlay) {
-                overlay.classList.toggle('show');
-            }
-        });
-        
-        // Close sidebar when clicking overlay
-        if (overlay) {
-            overlay.addEventListener('click', function() {
-                sidebarWrapper.classList.remove('open');
-                pageWrapper.classList.remove('sidebar-open');
-                overlay.classList.remove('show');
-            });
-        }
-        
-        // Close sidebar when clicking outside on mobile
-        document.addEventListener('click', function(event) {
-            if (window.innerWidth <= 768) {
-                if (sidebarWrapper.classList.contains('open') && 
-                    !event.target.closest('.sidebar-wrapper') && 
-                    !event.target.closest('.mobile-toggle-menu') &&
-                    !event.target.closest('.overlay')) {
-                    sidebarWrapper.classList.remove('open');
-                    pageWrapper.classList.remove('sidebar-open');
-                    if (overlay) {
-                        overlay.classList.remove('show');
+        if (sidebarToggleArrow && wrapper) {
+            sidebarToggleArrow.addEventListener('click', function(e) {
+                e.preventDefault();
+                wrapper.classList.toggle('toggled');
+                
+                // Also update the arrow icon direction
+                const icon = this.querySelector('i');
+                if (icon) {
+                    if (wrapper.classList.contains('toggled')) {
+                        icon.classList.remove('bx-arrow-to-left');
+                        icon.classList.add('bx-arrow-to-right');
+                    } else {
+                        icon.classList.remove('bx-arrow-to-right');
+                        icon.classList.add('bx-arrow-to-left');
                     }
                 }
+                
+                // Store state in localStorage for persistence
+                localStorage.setItem('sidebarCollapsed', wrapper.classList.contains('toggled'));
+            });
+            
+            // Check localStorage for saved state
+            if (localStorage.getItem('sidebarCollapsed') === 'true') {
+                wrapper.classList.add('toggled');
+                const icon = sidebarToggleArrow.querySelector('i');
+                if (icon) {
+                    icon.classList.remove('bx-arrow-to-left');
+                    icon.classList.add('bx-arrow-to-right');
+                }
             }
-        });
-    }
-});
-</script>
+        }
+        
+        // Mobile sidebar toggle (keep existing but ensure it works with desktop toggle)
+        const mobileToggleMenu = document.querySelector('.mobile-toggle-menu');
+        const sidebarWrapper = document.querySelector('.sidebar-wrapper');
+        const pageWrapper = document.querySelector('.page-wrapper');
+        const overlay = document.querySelector('.overlay.toggle-icon');
+        
+        if (mobileToggleMenu && sidebarWrapper) {
+            mobileToggleMenu.addEventListener('click', function(e) {
+                e.preventDefault();
+                sidebarWrapper.classList.toggle('open');
+                pageWrapper.classList.toggle('sidebar-open');
+                
+                // Toggle overlay
+                if (overlay) {
+                    overlay.classList.toggle('show');
+                }
+            });
+            
+            // Close sidebar when clicking overlay
+            if (overlay) {
+                overlay.addEventListener('click', function() {
+                    sidebarWrapper.classList.remove('open');
+                    pageWrapper.classList.remove('sidebar-open');
+                    overlay.classList.remove('show');
+                });
+            }
+            
+            // Close sidebar when clicking outside on mobile
+            document.addEventListener('click', function(event) {
+                if (window.innerWidth <= 768) {
+                    if (sidebarWrapper.classList.contains('open') && 
+                        !event.target.closest('.sidebar-wrapper') && 
+                        !event.target.closest('.mobile-toggle-menu') &&
+                        !event.target.closest('.overlay')) {
+                        sidebarWrapper.classList.remove('open');
+                        pageWrapper.classList.remove('sidebar-open');
+                        if (overlay) {
+                            overlay.classList.remove('show');
+                        }
+                    }
+                }
+            });
+        }
+    });
+    </script>
 
-<!-- Add this CSS for desktop sidebar collapse -->
-<style>
-    /* Desktop sidebar collapse styles */
-    .wrapper.toggled .sidebar-wrapper {
-        width: 70px !important;
-        transition: width 0.3s ease;
-    }
-    
-    .wrapper.toggled .sidebar-wrapper .sidebar-header .logo-text,
-    .wrapper.toggled .sidebar-wrapper .menu-title,
-    .wrapper.toggled .sidebar-wrapper .has-arrow:after {
-        display: none !important;
-    }
-    
-    .wrapper.toggled .sidebar-wrapper .sidebar-header {
-        padding: 0 10px !important;
-        justify-content: center !important;
-    }
-    
-    .wrapper.toggled .sidebar-wrapper .sidebar-header > div {
-        display: none;
-    }
-    
-    .wrapper.toggled .sidebar-wrapper .sidebar-header .toggle-icon {
-        display: block !important;
-        margin: 0 !important;
-    }
-    
-    .wrapper.toggled .sidebar-wrapper .sidebar-header .logo-icon {
-        display: block !important;
-        margin: 0 auto;
-    }
-    
-    .wrapper.toggled .sidebar-wrapper .metismenu .menu-title {
-        display: none;
-    }
-    
-    .wrapper.toggled .sidebar-wrapper .metismenu .parent-icon {
-        margin-right: 0 !important;
-        margin-left: 0 !important;
-    }
-    
-    .wrapper.toggled .sidebar-wrapper .metismenu a {
-        justify-content: center !important;
-        padding: 10px !important;
-    }
-    
-    .wrapper.toggled .page-wrapper {
-        margin-left: 70px !important;
-        transition: margin-left 0.3s ease;
-    }
-    
-    /* Mobile sidebar styles */
-    @media (max-width: 768px) {
-        .sidebar-wrapper {
-            position: fixed;
-            top: 0;
-            left: -280px;
-            width: 280px;
-            height: 100vh;
-            z-index: 1050;
-            transition: left 0.3s ease;
-            box-shadow: 0 0 15px rgba(0,0,0,0.1);
-        }
-        
-        .sidebar-wrapper.open {
-            left: 0;
-        }
-        
-        .page-wrapper {
-            transition: margin-left 0.3s ease;
-        }
-        
-        .page-wrapper.sidebar-open {
-            margin-left: 280px;
-        }
-        
-        .overlay.toggle-icon {
-            display: none;
-        }
-        
-        .overlay.toggle-icon.show {
-            display: block;
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0,0,0,0.5);
-            z-index: 1049;
-        }
-        
-        .mobile-toggle-menu {
-            cursor: pointer;
-            font-size: 24px;
-            padding: 10px;
-            z-index: 1051;
-        }
-        
-        /* Hide desktop toggle arrow on mobile */
-        .sidebar-header .toggle-icon {
-            display: none !important;
-        }
-    }
-    
-    /* Desktop - show toggle arrow */
-    @media (min-width: 769px) {
-        .mobile-toggle-menu {
-            display: none !important;
-        }
-        
-        .sidebar-header .toggle-icon {
-            display: flex !important;
-            cursor: pointer;
-        }
-    }
-</style>
+    <!--app JS-->
+    <script src="{{ asset('sitrep/adminbackend/assets/js/app.js')}}"></script>
 </body>
 </html>
